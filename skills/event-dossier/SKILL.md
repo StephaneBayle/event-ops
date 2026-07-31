@@ -25,6 +25,11 @@ fichiers présents du dossier et construis les livrables à partir d'eux. Tu éc
 uniquement dans `livrables/` — jamais dans les `.md` sources, qui appartiennent
 aux autres briques.
 
+**Pas de champ `lu:`** : les livrables ne portent pas de frontmatter. En revanche,
+**fais figurer sur chaque livrable la version de chaque source utilisée**
+(« généré depuis 00 v1, 02 v3, 05 v2 — le 12/09/2026 »). Une liasse imprimée qui ne dit
+pas de quelles versions elle est tirée est inexploitable dès la première révision.
+
 Pour toute brique dont le fichier manque, deux options : produire la section en
 appliquant la méthode de la brique correspondante et **prévenir que la source
 n'existe pas** (le résultat ne sera pas persisté par toi), ou proposer de lancer

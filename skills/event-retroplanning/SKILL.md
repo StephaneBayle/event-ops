@@ -20,6 +20,11 @@ vertébrale décisionnelle. On le corrige avec le chemin critique + le RACI.
 OUVRE `${CLAUDE_PLUGIN_ROOT}/references/convention-dossier.md` et applique-la.
 Lis `00-fiche-identite.md` (l'ancre) avant de produire, écris `01-retroplanning.md` après.
 
+**Renseigne le champ `lu:`** du frontmatter avec la version de chaque fichier que tu as
+effectivement lu : `lu: {00-fiche-identite.md: <version>}`.
+C'est ce qui permet de détecter plus tard que tu as travaillé sur une version périmée —
+sans lui, personne ne sait sur quoi tu t'es appuyé.
+
 ## Méthode
 
 1. **Rappelle l'ancre** : rattache le plan aux objectifs de la fiche d'identité.

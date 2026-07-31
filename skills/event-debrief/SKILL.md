@@ -22,6 +22,11 @@ faut donc le prévu. Le **Journal des décisions** de `00-fiche-identite.md` est
 matière première : il dit pourquoi les arbitrages ont été pris.
 Écris `07-debrief.md`.
 
+**Renseigne le champ `lu:`** du frontmatter avec la version de chaque fichier que tu as
+effectivement lu : **tous ceux que tu as ouverts**, sans exception.
+C'est ce qui permet de détecter plus tard que tu as travaillé sur une version périmée —
+sans lui, personne ne sait sur quoi tu t'es appuyé.
+
 ## Méthode
 
 1. **Clôture opérationnelle** : démontage / logistique retour, restitution

@@ -22,6 +22,11 @@ OUVRE `${CLAUDE_PLUGIN_ROOT}/references/convention-dossier.md` et applique-la.
 Lis `00-fiche-identite.md` (segments de public, jauge cible) ; écris
 `04-inscriptions.md`.
 
+**Renseigne le champ `lu:`** du frontmatter avec la version de chaque fichier que tu as
+effectivement lu : `lu: {00-fiche-identite.md: <version>}`.
+C'est ce qui permet de détecter plus tard que tu as travaillé sur une version périmée —
+sans lui, personne ne sait sur quoi tu t'es appuyé.
+
 Si un dossier d'événement passé est accessible, **va chercher son taux de no-show
 réel** dans la section « à réutiliser » de son débrief : une donnée observée sur un
 public comparable vaut infiniment mieux qu'une fourchette générique.

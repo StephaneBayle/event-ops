@@ -64,6 +64,9 @@ jour_j: 2026-11-14
 brique: conducteur
 version: 3
 maj: 2026-07-31
+lu:
+  00-fiche-identite.md: 2
+  03-prestataires.md: 4
 ---
 ```
 
@@ -73,22 +76,21 @@ maj: 2026-07-31
   l'équipe doit savoir quelle version elle tient en main le jour J.
 - `maj` — date de dernière modification.
 
-### `lu:` — champ optionnel, versions des dépendances
+### `lu:` — versions des dépendances
 
-Une brique peut consigner la version de chaque dépendance **au moment où elle a écrit** :
-
-```yaml
-lu:
-  00-fiche-identite.md: 1
-  02-budget.md: 3
-```
-
-C'est ce qui rend la péremption détectable sans interprétation : si `02-budget.md` est
+Chaque brique consigne la version des fichiers dont elle dépend, **telle qu'elle les a
+lus**. C'est ce qui rend la péremption détectable sans interprétation : si `02-budget.md` est
 passé en v4 depuis, la brique qui déclare l'avoir lu en v3 est à repasser, et
 `scripts/check_dossier.py` le dit. Sans ce champ, le contrôle se rabat sur la comparaison
 des dates `maj`, qui rate tout ce qui se fait dans la même journée.
 
-Facultatif — un dossier qui ne le porte pas reste valide.
+**Toute brique qui lit une autre brique le renseigne.** Deux exceptions, et deux
+seulement : `event-cadrage`, qui est l'ancre et ne dépend de rien, et `event-dossier`,
+dont les livrables ne portent pas de frontmatter — celui-ci fait figurer les versions
+sources **sur le livrable lui-même**.
+
+Un dossier antérieur à cette règle et qui ne porte pas `lu:` reste valide — le contrôle
+se rabat sur les dates `maj`, en moins précis.
 
 ## Lire l'état du dossier
 
@@ -152,6 +154,8 @@ validée. Une valeur estimée par une brique qui n'en est pas propriétaire doit
   la modification demandée, et conserver le reste. Ne jamais repartir d'une page blanche
   sans le dire.
 - **Incrémenter `version`** et mettre `maj` à la date du jour.
+- **Renseigner `lu:`** avec la version de chaque dépendance effectivement ouverte — pas
+  celle que tu supposes, celle que tu as lue.
 - **Ne jamais supprimer une donnée saisie par un humain** (un nom de contact, un montant
   négocié, une contrainte du lieu) sans confirmation explicite.
 - En fin d'écriture, annoncer le fichier touché et sa nouvelle version.

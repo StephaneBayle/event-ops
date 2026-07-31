@@ -22,6 +22,11 @@ pas un dossier opérationnel.
 OUVRE `${CLAUDE_PLUGIN_ROOT}/references/convention-dossier.md` et applique-la.
 Lis `00-fiche-identite.md` et `02-budget.md` s'ils existent ; écris `03-prestataires.md`.
 
+**Renseigne le champ `lu:`** du frontmatter avec la version de chaque fichier que tu as
+effectivement lu : `00-fiche-identite.md` et `02-budget.md`.
+C'est ce qui permet de détecter plus tard que tu as travaillé sur une version périmée —
+sans lui, personne ne sait sur quoi tu t'es appuyé.
+
 Les montants que tu inscris ici doivent rester cohérents avec le budget. Si tu retiens
 un devis qui fait sortir un poste de son enveloppe, dis-le et propose de reprendre
 `event-budget`.

@@ -23,6 +23,11 @@ OUVRE `${CLAUDE_PLUGIN_ROOT}/references/convention-dossier.md` et applique-la.
 Lis `00-fiche-identite.md` (enveloppe et objectifs) et `03-prestataires.md` (montants
 réellement négociés) ; écris `02-budget.md`.
 
+**Renseigne le champ `lu:`** du frontmatter avec la version de chaque fichier que tu as
+effectivement lu : `00-fiche-identite.md`, `03-prestataires.md` et `04-inscriptions.md`.
+C'est ce qui permet de détecter plus tard que tu as travaillé sur une version périmée —
+sans lui, personne ne sait sur quoi tu t'es appuyé.
+
 Si un poste dépasse son enveloppe, ne le lisse pas : nomme le dépassement, chiffre-le,
 et propose des arbitrages.
 

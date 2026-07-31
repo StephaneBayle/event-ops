@@ -67,7 +67,8 @@ dupliqué. Il contrôle :
 - fichiers hors convention (mauvais index, mauvais nom) ;
 - **fraîcheur** — une brique plus ancienne que ce dont elle dépend est signalée, avec un
   message dédié pour le cycle `02` ↔ `03` ;
-- **péremption exacte** quand le champ optionnel `lu:` est renseigné (voir la convention) ;
+- **péremption exacte** via le champ `lu:`, que chaque brique renseigne avec la version
+  de ses dépendances au moment où elle écrit (voir la convention) ;
 - livrables générés plus anciens qu'une brique source.
 
 Ce qui relève de l'information et **jamais de l'erreur** : les briques absentes. La

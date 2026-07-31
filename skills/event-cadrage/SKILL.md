@@ -23,6 +23,9 @@ Tu es l'**ancre** : c'est toi qui crées le dossier. Localise-le (ou propose de 
 puis écris `00-fiche-identite.md`. Si une fiche existe déjà, reprends-la et complète-la
 plutôt que de repartir de zéro.
 
+**Pas de champ `lu:`** dans la fiche d'identité : tu es l'ancre, tu ne dépends d'aucune
+autre brique. C'est la seule qui n'en porte pas.
+
 Si tu repères un dossier d'événement passé (un autre répertoire avec un `07-debrief.md`),
 propose de t'appuyer sur sa section « à réutiliser » : prestataires retenus, hypothèses
 de fréquentation vérifiées, postes budgétaires sous-estimés.

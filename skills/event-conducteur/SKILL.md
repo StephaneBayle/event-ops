@@ -20,6 +20,12 @@ OUVRE `${CLAUDE_PLUGIN_ROOT}/references/convention-dossier.md` et applique-la.
 Lis `00-fiche-identite.md`, `01-retroplanning.md`, `03-prestataires.md` et
 `04-inscriptions.md` s'ils existent ; écris `05-conducteur.md`.
 
+**Renseigne le champ `lu:`** du frontmatter avec la version de chaque fichier que tu as
+effectivement lu : `00-fiche-identite.md`, `01-retroplanning.md`, `03-prestataires.md`,
+`04-inscriptions.md`.
+C'est ce qui permet de détecter plus tard que tu as travaillé sur une version périmée —
+sans lui, personne ne sait sur quoi tu t'es appuyé.
+
 **Le conducteur est le fichier le plus versionné du dossier** — il change dix à quinze
 fois entre J-30 et J-1. Incrémente `version` à chaque réécriture et fais figurer
 « v<N> — <date> » en tête du document lui-même : l'équipe doit pouvoir vérifier d'un

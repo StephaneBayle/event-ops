@@ -21,6 +21,11 @@ Lis tous les fichiers présents du dossier — le registre des risques se nourri
 tout : engagements budgétaires, prestataires uniques, jauge, conducteur.
 Écris `06-risques.md`.
 
+**Renseigne le champ `lu:`** du frontmatter avec la version de chaque fichier que tu as
+effectivement lu : **tous ceux que tu as ouverts**, sans exception.
+C'est ce qui permet de détecter plus tard que tu as travaillé sur une version périmée —
+sans lui, personne ne sait sur quoi tu t'es appuyé.
+
 ## Méthode
 
 1. **Pre-mortem** (Gary Klein) : « On est le lendemain, c'est un fiasco — qu'est-ce
