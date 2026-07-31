@@ -216,6 +216,43 @@ else:
         elif expected not in written:
             err("convention", f"{d.name} écrit {written[0]} mais la convention dit {expected}")
 
+    # --- 4 bis. Instruction `lu:` ---------------------------------------------
+    # La convention attend que toute brique dépendant d'une autre consigne la
+    # version qu'elle a lue. Ce contrôle vérifie que la skill le DIT — pas
+    # qu'elle le fasse : c'est une déclaration, pas une mesure. Il attrape la
+    # skill ajoutée plus tard sans l'instruction, pas la skill qui ment.
+    lit_de = dict(
+        re.findall(
+            r"\|\s*`(event-[a-z]+)`\s*\|([^|]*)\|\s*`?(?:[0-9]{2}-[a-z-]+\.md|livrables/\*)`?\s*\|",
+            conv,
+        )
+    )
+    for d in skill_dirs:
+        sk = d / "SKILL.md"
+        if sk.exists() is False or d.name not in declared:
+            continue
+        text = sk.read_text(encoding="utf-8")
+        mentionne = "`lu:`" in text
+        nie = re.search(r"[Pp]as de champ\s+`lu:`", text) is not None
+
+        # Deux exceptions, tirées de la convention et non redéclarées ici :
+        # event-dossier n'écrit pas de frontmatter, event-cadrage est l'ancre.
+        lit = lit_de.get(d.name, "")
+        sans_dependance = not re.search(r"`\d{2}`|tous", lit)
+        exception = declared[d.name] == "livrables/*" or sans_dependance
+
+        if exception:
+            if not nie:
+                err(
+                    "lu",
+                    f"{d.name} n'a pas de dépendance à consigner : "
+                    "il doit dire explicitement « pas de champ `lu:` »",
+                )
+        elif not mentionne:
+            err("lu", f"{d.name} ne dit pas de renseigner `lu:` (la convention l'attend)")
+        elif nie:
+            err("lu", f"{d.name} nie le champ `lu:` alors qu'il dépend de {lit.strip()}")
+
     # Numérotation : pas de doublon d'index entre briques.
     seen: dict[str, str] = {}
     for skill, fname in declared.items():

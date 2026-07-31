@@ -43,6 +43,10 @@ livrables, qui reste un jugement humain (test de l'étranger compétent) :
   `convention-dossier.md`, et les index `NN-` sont uniques.
 - Les skills du `README` correspondent aux répertoires de `skills/`, nombre annoncé
   compris.
+- Chaque skill **dit** ce qu'elle fait du champ `lu:` : l'instruction de le renseigner si
+  elle dépend d'une autre brique, la mention explicite « pas de champ `lu:` » sinon.
+  Le contrôle vérifie l'instruction, **pas le comportement** — `lu:` reste une
+  déclaration, pas une mesure.
 
 Les deux derniers contrôles sont les plus utiles sur la durée : ce sont des
 **invariants dupliqués**, et tout invariant écrit à deux endroits finit par diverger.
@@ -102,6 +106,9 @@ plugin — rien ne rejoue les sections « À faire remonter ». Son `README.md` 
 Trois endroits à mettre à jour, sinon le script échoue — c'est le but :
 `skills/<nom>/SKILL.md`, la table lit/écrit de `references/convention-dossier.md`,
 et le tableau du `README.md`.
+
+Dans le `SKILL.md`, ne pas oublier le champ `lu:` : l'instruction de le renseigner, ou la
+mention explicite qu'il n'y en a pas. Le linter refuse le silence sur ce point.
 
 ## Principes de conception
 
