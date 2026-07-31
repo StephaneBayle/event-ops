@@ -8,6 +8,20 @@ membre de l'équipe.
 Cible : événements **corporate/conférence**, **salon/portes ouvertes**,
 **soirée/réception**.
 
+## Installation
+
+Ce dépôt est son propre marketplace : le plugin s'installe directement depuis git.
+
+```
+/plugin marketplace add StephaneBayle/event-ops
+```
+
+puis installer `event-ops` depuis ce marketplace. Pour mettre à jour après un
+`git push`, actualiser le marketplace et réinstaller.
+
+C'est ce qui rend le plugin partageable : chaque membre de l'équipe installe depuis
+la même source, et obtient exactement la même version.
+
 ## Les neuf briques
 
 Chaque brique est une *skill* : elle se déclenche automatiquement quand le contexte

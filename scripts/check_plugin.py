@@ -19,6 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MANIFEST = ROOT / ".claude-plugin" / "plugin.json"
+MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
 SKILLS_DIR = ROOT / "skills"
 CONVENTION = ROOT / "references" / "convention-dossier.md"
 README = ROOT / "README.md"
@@ -64,6 +65,61 @@ else:
         home = manifest.get("homepage", "")
         if re.search(r"REMPLACER|REPLACE|TODO|XXX|example\.com", home, re.I):
             err("manifeste", f"homepage contient un placeholder — {home!r}")
+
+
+# --- 1 bis. Marketplace ------------------------------------------------------
+# Le dépôt est son propre marketplace (schéma à plugin unique : plugin.json et
+# marketplace.json côte à côte, source "."). Version, description et keywords y
+# sont donc écrits deux fois — invariant dupliqué, donc à épingler.
+
+if not MARKETPLACE.exists():
+    err("marketplace", f"{MARKETPLACE.relative_to(ROOT)} absent — plugin non installable depuis git")
+else:
+    try:
+        mkt = json.loads(MARKETPLACE.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        err("marketplace", f"JSON invalide — {e}")
+    else:
+        entries = mkt.get("plugins")
+        if not entries:
+            err("marketplace", "aucune entrée dans 'plugins'")
+        else:
+            names = [e.get("name") for e in entries]
+            if manifest and manifest.get("name") not in names:
+                err(
+                    "marketplace",
+                    f"le plugin '{manifest.get('name')}' n'est pas listé (trouvé : {names})",
+                )
+            for e in entries:
+                src = e.get("source")
+                if not src:
+                    err("marketplace", f"{e.get('name')} — champ 'source' manquant")
+                elif not (ROOT / src).exists():
+                    err("marketplace", f"{e.get('name')} — source '{src}' introuvable")
+                elif not (ROOT / src / ".claude-plugin" / "plugin.json").exists():
+                    err("marketplace", f"{e.get('name')} — source '{src}' sans plugin.json")
+
+            if manifest:
+                entry = next((e for e in entries if e.get("name") == manifest.get("name")), None)
+                if entry:
+                    if entry.get("version") != manifest.get("version"):
+                        err(
+                            "versions",
+                            f"marketplace annonce {entry.get('version')} "
+                            f"alors que le manifeste est en {manifest.get('version')}",
+                        )
+                    if entry.get("description") != manifest.get("description"):
+                        err("marketplace", "description divergente entre marketplace.json et plugin.json")
+                    if entry.get("keywords") and entry["keywords"] != manifest.get("keywords"):
+                        warn("marketplace", "keywords divergents entre marketplace.json et plugin.json")
+
+        meta = mkt.get("metadata", {})
+        if manifest and meta.get("version") and meta["version"] != manifest.get("version"):
+            err(
+                "versions",
+                f"marketplace.metadata en {meta['version']} "
+                f"alors que le manifeste est en {manifest.get('version')}",
+            )
 
 
 # --- 2. Skills : frontmatter et cohérence de version -------------------------
@@ -181,7 +237,12 @@ elif skill_names:
     for name in skill_names:
         if f"`{name}`" not in readme:
             err("readme", f"{name} n'est pas documentée dans le README")
+    # Le nom du plugin lui-même apparaît légitimement (section Installation) et
+    # n'est pas une skill.
+    plugin_name = manifest.get("name") if manifest else None
     for cited in set(re.findall(r"`(event-[a-z]+)`", readme)):
+        if cited == plugin_name:
+            continue
         if cited not in skill_names:
             err("readme", f"{cited} est citée mais n'existe pas dans skills/")
     # Compte annoncé en toutes lettres.

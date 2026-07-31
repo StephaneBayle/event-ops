@@ -6,6 +6,10 @@ Plugin Claude pour la gestion d'événements et la production de dossiers opéra
 
 - `.claude-plugin/plugin.json` — **manifeste du plugin, source de vérité de la version.**
   Ne pas ajouter de `package.json` : le plugin ne contient aucun code JS.
+- `.claude-plugin/marketplace.json` — le dépôt est son propre marketplace (schéma à
+  plugin unique, `source: "."`), ce qui rend le plugin installable depuis git.
+  **Il duplique version, description et keywords du manifeste** : les deux fichiers
+  doivent être modifiés ensemble, le linter échoue sinon.
 - `skills/` — les briques, chacune auto-suffisante (aucune dépendance à une skill externe).
 - `references/` — fichiers de référence partagés, parcourus par les skills.
   - `chantiers.md` — taxonomie des domaines + lentilles de complétude.

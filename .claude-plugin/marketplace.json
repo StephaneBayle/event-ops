@@ -1,0 +1,32 @@
+{
+  "name": "event-ops",
+  "owner": {
+    "name": "AI_LAB — Paddock Academy"
+  },
+  "metadata": {
+    "description": "Dossier opérationnel d'événement, de bout en bout : cadrage, rétroplanning, budget, prestataires, inscriptions, conducteur jour J, risques, débrief.",
+    "version": "0.3.0",
+    "pluginRoot": "."
+  },
+  "plugins": [
+    {
+      "name": "event-ops",
+      "source": ".",
+      "version": "0.3.0",
+      "description": "Dossier opérationnel d'événement : cadrage, rétroplanning + RACI, budget, prestataires, inscriptions, conducteur jour J, cartographie des risques, débrief AAR, et assemblage du dossier complet stylisé. Briques modulaires, sans dépendance externe.",
+      "keywords": [
+        "evenementiel",
+        "gestion-de-projet",
+        "raci",
+        "conducteur",
+        "run-of-show",
+        "risques",
+        "debrief",
+        "aar",
+        "budget",
+        "prestataires",
+        "inscriptions"
+      ]
+    }
+  ]
+}
