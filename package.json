@@ -1,0 +1,17 @@
+{
+  "name": "event-ops",
+  "version": "0.1.0",
+  "description": "Plugin Claude auto-suffisant pour produire et piloter un dossier opérationnel d'événement, de bout en bout.",
+  "license": "MIT",
+  "author": "Stéphane Bayle <stephane.bayle@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stephanebayle/event-ops.git"
+  },
+  "keywords": [
+    "event-management",
+    "event-ops",
+    "claude-plugin",
+    "wargaming"
+  ]
+}
