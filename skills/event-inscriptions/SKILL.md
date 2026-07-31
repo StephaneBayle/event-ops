@@ -100,8 +100,17 @@ Fais remonter le nombre garanti et sa date dans `02-budget.md` et le jalon dans
 
 - Dispositif d'émargement (nominatif, QR code, liste papier de secours — **toujours
   une liste papier de secours**, le réseau tombe).
-- Nombre de postes d'accueil dimensionné sur le **pic d'arrivée**, pas sur le total :
-  60 à 70 % du public arrive dans les 30 minutes précédant l'ouverture.
+- Nombre de postes d'accueil dimensionné sur le **pic d'arrivée**, pas sur le total.
+  Le pic ne se calcule pas de la même façon selon le format — **vérifie lequel tu as
+  avant d'appliquer un ratio** :
+  - **Heure de début fixe** (conférence, soirée, séminaire) : 60 à 70 % du public arrive
+    dans les 30 minutes précédant l'ouverture. C'est le cas le plus tendu.
+  - **Flux continu** (portes ouvertes, salon) : il n'y a pas d'heure de début, le flux
+    s'étale sur toute l'amplitude. Dimensionne sur le **pic horaire d'entrées** issu de
+    l'hypothèse de fréquentation, jamais sur le ratio ci-dessus — il sur-dimensionne
+    l'ouverture et sous-dimensionne le reste de la journée.
+  - Dans les deux cas, compte **une marge de 20 à 30 %** : un poste qui tourne à 100 %
+    de sa capacité théorique produit une file qui ne se résorbe jamais.
 - Circuit séparé pour les VIP, la presse et les intervenants.
 - Gestion des non-inscrits qui se présentent : politique décidée à l'avance, pas
   improvisée à la porte.

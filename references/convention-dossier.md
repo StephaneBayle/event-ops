@@ -88,7 +88,7 @@ Au démarrage, toute skill :
 |---|---|---|
 | `event-cadrage` | — | `00-fiche-identite.md` |
 | `event-retroplanning` | `00` | `01-retroplanning.md` |
-| `event-budget` | `00`, `03` | `02-budget.md` |
+| `event-budget` | `00`, `03`, `04` | `02-budget.md` |
 | `event-prestataires` | `00`, `02` | `03-prestataires.md` |
 | `event-inscriptions` | `00` | `04-inscriptions.md` |
 | `event-conducteur` | `00`, `01`, `03`, `04` | `05-conducteur.md` |
@@ -98,6 +98,36 @@ Au démarrage, toute skill :
 
 Une dépendance absente n'est **jamais bloquante** : produire quand même, en marquant
 explicitement l'hypothèse retenue et en proposant la brique manquante.
+
+### Le cycle `02` ↔ `03` : deux passes, pas une
+
+`event-budget` lit `03-prestataires.md`, et `event-prestataires` lit `02-budget.md`.
+**Ce n'est pas une dépendance, c'est un cycle** : quel que soit l'ordre, la première des
+deux tourne sans sa dépendance. C'est normal et voulu — un budget se construit avant
+d'avoir des devis, et on ne consulte pas des prestataires sans enveloppe.
+
+**Conséquence : la seconde passe n'est pas optionnelle.**
+
+| Passe | Brique | Ce qu'elle produit |
+|---|---|---|
+| 1 | `event-budget` | Budget d'estimation — toutes lignes en « Estimation », enveloppe du cadrage |
+| 2 | `event-prestataires` | Cahiers des charges, devis comparés, **montants négociés** |
+| 3 | `event-budget` **à nouveau** | Les montants négociés remplacent les estimations → **nouvelle version de `02`** |
+
+Un budget qui reste en v1 alors que `03-prestataires.md` existe est un budget périmé : il
+affiche des estimations dont on a les vrais prix. **Quand `event-prestataires` retient un
+devis, elle annonce explicitement qu'il faut repasser `event-budget`** — et l'inverse vaut
+aussi : un budget qui trouve `03` sur disque intègre ses montants au lieu de ré-estimer.
+
+La révision doit dire **ce qui a bougé et pourquoi**, ligne à ligne. Un écart global proche
+de zéro cache souvent deux erreurs de sens contraire qui s'annulent : c'est justement
+l'information qu'on cherche.
+
+Même logique, plus dangereuse, pour la **garantie traiteur** : `02` peut la poser en
+hypothèse faute de `04-inscriptions.md`, `03` la reprend dans le cahier des charges, un
+devis l'inscrit et un acompte la fige — sans que son propriétaire légitime l'ait jamais
+validée. Une valeur estimée par une brique qui n'en est pas propriétaire doit être
+**re-vérifiée dès que le propriétaire existe**, et jamais figée dans un contrat avant.
 
 ## Écrire
 
