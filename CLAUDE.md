@@ -10,6 +10,44 @@ Plugin Claude pour la gestion d'événements et la production de dossiers opéra
 - `references/` — fichiers de référence partagés, parcourus par les skills.
   - `chantiers.md` — taxonomie des domaines + lentilles de complétude.
   - `convention-dossier.md` — convention du dossier événement persistant.
+- `scripts/check_plugin.py` — vérification structurelle (voir ci-dessous).
+
+## Vérification
+
+**Après toute modification du plugin, lancer :**
+
+```bash
+python3 scripts/check_plugin.py
+```
+
+Aucune dépendance (bibliothèque standard). Tourne aussi en CI sur push et PR
+(`.github/workflows/check.yml`).
+
+Le script vérifie les invariants **mécaniques** — il ne juge pas la qualité des
+livrables, qui reste un jugement humain (test de l'étranger compétent) :
+
+- Manifeste présent, JSON valide, sans placeholder dans `homepage`.
+  *C'est le bug qui a réellement eu lieu : `plugin.json` non commité, plugin
+  non installable.*
+- Frontmatter de chaque skill : `name` identique au nom du répertoire — un
+  désalignement et la skill ne se déclenche jamais.
+- Versions des skills alignées sur celle du manifeste.
+- Chaque `${CLAUDE_PLUGIN_ROOT}/…` pointe vers un fichier existant. **Échec
+  silencieux sinon** : Claude ne trouve pas le fichier et improvise de mémoire,
+  ce que les skills lui interdisent explicitement.
+- Le fichier que chaque skill déclare écrire correspond à la table lit/écrit de
+  `convention-dossier.md`, et les index `NN-` sont uniques.
+- Les skills du `README` correspondent aux répertoires de `skills/`, nombre annoncé
+  compris.
+
+Les deux derniers contrôles sont les plus utiles sur la durée : ce sont des
+**invariants dupliqués**, et tout invariant écrit à deux endroits finit par diverger.
+
+### Ajouter une skill
+
+Trois endroits à mettre à jour, sinon le script échoue — c'est le but :
+`skills/<nom>/SKILL.md`, la table lit/écrit de `references/convention-dossier.md`,
+et le tableau du `README.md`.
 
 ## Principes de conception
 
