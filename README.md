@@ -12,12 +12,20 @@ Cible : événements **corporate/conférence**, **salon/portes ouvertes**,
 
 Ce dépôt est son propre marketplace : le plugin s'installe directement depuis git.
 
+Dans **Claude Code** — pas dans un terminal — saisir :
+
 ```
 /plugin marketplace add StephaneBayle/event-ops
 ```
 
-puis installer `event-ops` depuis ce marketplace. Pour mettre à jour après un
-`git push`, actualiser le marketplace et réinstaller.
+puis installer `event-ops` depuis ce marketplace. Selon le client, la même opération
+est disponible dans l'interface de gestion des plugins.
+
+> `/plugin` est une commande Claude Code, pas une commande shell. Dans l'application
+> de bureau, la saisir dans la zone de conversation ; en terminal, au prompt de
+> `claude` (qui suppose le CLI installé).
+
+Pour mettre à jour après un `git push` : actualiser le marketplace, puis réinstaller.
 
 C'est ce qui rend le plugin partageable : chaque membre de l'équipe installe depuis
 la même source, et obtient exactement la même version.
