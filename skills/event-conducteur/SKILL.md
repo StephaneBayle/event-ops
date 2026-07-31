@@ -11,28 +11,61 @@ version: 0.3.0
 
 # Conducteur jour J (run of show)
 
-Tu produis l'instrument que l'equipe tient en main sous tension. C'est la partie
-que la plupart des dossiers negligent et qui fait toute la difference.
+Tu produis l'instrument que l'équipe tient en main sous tension. C'est la partie
+que la plupart des dossiers négligent et qui fait toute la différence.
 
-## Methode
+## Dossier
 
-1. **Conducteur minute** : sequence par sequence, avec pour chaque creneau :
-   heure de debut | action | responsable | ressources (technique, RH, materiel) |
-   signal de transition vers la sequence suivante.
-2. **Plan de salle** : zones, flux, points de controle d'acces.
-3. **Annuaire jour J** : contacts operationnels (nom, role, telephone), regroupes
-   par fonction.
-4. **Procedures d'escalade** : pour chaque incident plausible, qui decide et selon
-   quel seuil. Format clair "Si X alors Y, decideur = Z".
-5. **PACE planning** pour chaque fonction vitale (son, acces, intervenant cle,
-   electricite) : **P**rimary / **A**lternate / **C**ontingency / **E**mergency —
-   quatre niveaux de repli. (Origine militaire, pertinent pour des publics
-   exigeants en continuite.)
-6. **Test du parcours-participant** : suis mentalement chaque persona (VIP,
-   intervenant, presse, public) de l'arrivee au depart. Tout point de contact non
-   couvert par le conducteur = un trou ; signale-le.
+OUVRE `${CLAUDE_PLUGIN_ROOT}/references/convention-dossier.md` et applique-la.
+Lis `00-fiche-identite.md`, `01-retroplanning.md`, `03-prestataires.md` et
+`04-inscriptions.md` s'ils existent ; écris `05-conducteur.md`.
+
+**Le conducteur est le fichier le plus versionné du dossier** — il change dix à quinze
+fois entre J-30 et J-1. Incrémente `version` à chaque réécriture et fais figurer
+« v<N> — <date> » en tête du document lui-même : l'équipe doit pouvoir vérifier d'un
+coup d'œil qu'elle tient la bonne version. Si tu modifies un conducteur existant,
+résume les changements depuis la version précédente.
+
+## Méthode
+
+1. **Conducteur minuté** — une ligne par séquence :
+
+   | H début | Durée | H fin | Séquence | Action détaillée | Responsable | Tops régie (son / lumière / vidéo) | Ce que voit et entend le public | Ressources | Signal de transition |
+
+   - La colonne **Durée** n'est pas décorative : c'est elle qui permet de recalculer
+     toute la feuille quand une séquence glisse. Sans elle, le moindre retard oblige
+     à tout refaire à la main.
+   - Les **tops régie** sont la raison pour laquelle la régie tient ce document.
+     Sois précis : « top son : lancer jingle 8 s », « lumière : plein feu scène ».
+   - **Ce que voit et entend le public** révèle les trous de mise en scène — les
+     moments de flottement, d'écran noir, de silence non voulu.
+   - Signale explicitement les séquences **compressibles** (celles qu'on peut raccourcir
+     si on prend du retard) et celles qui ne le sont pas.
+2. **Plan de salle** : zones, flux, points de contrôle d'accès, **cheminements PMR**
+   et places réservées, issues de secours.
+3. **Annuaire jour J** : contacts opérationnels (nom, rôle, téléphone), regroupés
+   par fonction. N'invente jamais un numéro : laisse le champ vide et marque-le
+   « à compléter ».
+4. **Procédures d'escalade** : pour chaque incident plausible, qui décide et selon
+   quel seuil. Format clair « Si X alors Y, décideur = Z ». Inclus obligatoirement
+   les décisions lourdes : **interruption, évacuation, annulation en cours
+   d'événement** — et qui en a le pouvoir.
+5. **PACE planning** pour chaque fonction vitale (son, accès, intervenant clé,
+   électricité, connexion pour le distanciel si hybride) : **P**rimary / **A**lternate /
+   **C**ontingency / **E**mergency — quatre niveaux de repli.
+6. **Volet hybride** — si l'événement est hybride, le distanciel a son propre fil :
+   modération du chat, régie de streaming, temps de latence, moment de bascule,
+   captation pour rediffusion. Ne le traite pas comme une note en bas de page.
+7. **Test du parcours-participant** : suis mentalement chaque persona (VIP,
+   intervenant, presse, public, personne à mobilité réduite, prestataire) de
+   l'arrivée au départ. Tout point de contact non couvert par le conducteur = un
+   trou ; signale-le.
 
 ## Sortie
 
-Conducteur en tableau chronologique + plan de salle (description ou schema) +
-annuaire + table d'escalade + grille PACE des fonctions vitales.
+En-tête « v<N> — <date> » + conducteur en tableau chronologique + plan de salle
+(description ou schéma) + annuaire + table d'escalade + grille PACE des fonctions
+vitales. Termine par les trous détectés et les champs restant à compléter.
+
+Écris `05-conducteur.md` et annonce sa version. Le rendu A4 paysage imprimable pour
+la régie est produit par `event-dossier`.

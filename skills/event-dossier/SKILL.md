@@ -10,41 +10,66 @@ description: >
 version: 0.3.0
 ---
 
-# Dossier operationnel complet
+# Dossier opérationnel complet
 
-Tu assembles l'ensemble en un livrable coherent et soigne. Objectif : qu'un tiers
-competent puisse executer l'evenement avec ce seul document (test de l'etranger
-competent).
+Tu assembles l'ensemble en un jeu de livrables cohérent et soigné. Objectif : qu'un
+tiers compétent puisse exécuter l'événement avec ces seuls documents (test de
+l'étranger compétent).
 
-## Methode
+## Dossier
 
-1. **Sequence de production**, dans l'ordre :
-   - Fiche d'identite (logique de event-cadrage).
-   - AVANT : retroplanning + RACI + checklists (logique de event-retroplanning).
-   - PENDANT : conducteur + plan de salle + escalade + PACE (event-conducteur).
-   - Risques : cartographie + traitement 4T (event-risques).
-   - APRES : cloture + bilan KPIs + AAR (event-debrief).
-   Reutilise la methode de chaque brique ; ne redemande pas ce qui est deja connu.
-2. **Tests de completude** avant de finaliser. Pour le test de taxonomie, OUVRE
-   et PARCOURS `${CLAUDE_PLUGIN_ROOT}/references/chantiers.md` plutot que de te
-   fier a ta memoire ; applique ses 6 lentilles et son controle final :
-   - Taxonomie : les 13 domaines parcourus (adresses ou "sans objet" justifie) ?
-   - Temps x chantier : chaque domaine retenu present en avant / pendant / apres ?
-   - Flux : personnes, biens, energie, argent traces de bout en bout ?
-   - Orphelins de RACI : aucune tache sans Responsable assigne ?
-   - Parcours : chaque persona a-t-il un chemin sans trou ?
-   - Etranger competent : ce document suffit-il a executer sans te poser de question ?
-   Signale tout manque restant plutot que de le masquer.
+OUVRE `${CLAUDE_PLUGIN_ROOT}/references/convention-dossier.md` et applique-la.
 
-## Sortie — livrable stylise
+**Tu assembles depuis les fichiers, pas depuis la conversation.** Lis tous les
+fichiers présents du dossier et construis les livrables à partir d'eux. Tu écris
+uniquement dans `livrables/` — jamais dans les `.md` sources, qui appartiennent
+aux autres briques.
 
-Genere un document final **production-ready**, pas un brouillon :
-- Format par defaut : **fichier HTML autonome** (single-file, imprimable,
-  navigable par ancres), sobre et soigne — table des matieres, sections
-  numerotees AVANT / PENDANT / APRES, tableaux propres.
-- Sur demande : version **.docx** equivalente.
-- Soigne la hierarchie visuelle et la lisibilite ; evite le rendu "template
-  generique". Place la fiche d'identite en tete comme page d'ancrage.
+Pour toute brique dont le fichier manque, deux options : produire la section en
+appliquant la méthode de la brique correspondante et **prévenir que la source
+n'existe pas** (le résultat ne sera pas persisté par toi), ou proposer de lancer
+la brique d'abord. Ne fabrique pas silencieusement du contenu qui aurait dû être
+validé ailleurs.
 
-Termine par un encadre "Points a verifier avant diffusion" listant les hypotheses
-restantes et les zones a confirmer par un humain.
+## Méthode
+
+1. **Ordre d'assemblage** :
+   - Fiche d'identité — page d'ancrage.
+   - AVANT : rétroplanning + go/no-go + RACI + checklists.
+   - Moyens : budget, prestataires, inscriptions.
+   - PENDANT : conducteur + plan de salle + escalade + PACE.
+   - Transverse : cartographie des risques.
+   - APRÈS : clôture + bilan KPIs + AAR.
+2. **Tests de complétude** avant de finaliser. OUVRE et PARCOURS
+   `${CLAUDE_PLUGIN_ROOT}/references/chantiers.md` plutôt que de te fier à ta
+   mémoire ; applique **toutes** ses lentilles et son contrôle final. Signale tout
+   manque restant plutôt que de le masquer.
+3. **Cohérence inter-fichiers** — vérifie que les briques ne se contredisent pas :
+   même jour J partout, jauge cohérente entre inscriptions / plan de salle /
+   garanties traiteur, montants du budget cohérents avec les prestataires retenus,
+   responsables du conducteur présents dans le RACI et dans l'annuaire. Toute
+   divergence se signale, elle ne se lisse pas.
+
+## Sortie — jeu de livrables
+
+Un seul HTML monolithique ne couvre aucun usage terrain correctement. Produis dans
+`livrables/` :
+
+| Fichier | Usage | Format |
+|---|---|---|
+| `dossier.html` | Le dossier complet à diffuser | HTML autonome, imprimable, navigable par ancres, table des matières |
+| `conducteur-a4.html` | **Pour la régie et l'équipe, en main le jour J** | A4 **paysage**, `@media print` propre, gros corps de texte, numéro de version en en-tête et en pied de chaque page |
+| `annuaire.html` | Contacts d'urgence, consulté sur téléphone | Une colonne, lisible sur mobile, numéros cliquables (`tel:`) |
+| `checklists.html` | À imprimer et cocher | Cases à cocher réelles, une page par jalon |
+| `budget.xlsx` | **Non négociable** — l'event manager travaille dans Excel | Généré depuis `02-budget.md`, formules de sous-totaux vivantes |
+
+Sur demande : version **.docx** du dossier complet.
+
+Soigne la hiérarchie visuelle et la lisibilité ; évite le rendu « template générique ».
+Les documents destinés au jour J priment sur l'esthétique du dossier : ils se lisent
+sous tension, dans une salle mal éclairée, par quelqu'un qui cherche une information
+en trois secondes.
+
+Termine par un encadré **« Points à vérifier avant diffusion »** listant les hypothèses
+restantes, les champs « à compléter » (contacts, montants) et les incohérences
+inter-fichiers détectées.
