@@ -4,6 +4,9 @@ jour_j: 2026-10-10
 brique: prestataires
 version: 1
 maj: 2026-07-31
+lu:
+  00-fiche-identite.md: 1
+  02-budget.md: 1
 ---
 
 # Prestataires — JPO 2026

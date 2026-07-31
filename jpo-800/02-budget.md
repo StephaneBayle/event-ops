@@ -4,6 +4,10 @@ jour_j: 2026-10-10
 brique: budget
 version: 3
 maj: 2026-07-31
+lu:
+  00-fiche-identite.md: 1
+  03-prestataires.md: 1
+  04-inscriptions.md: 1
 ---
 
 # Budget prévisionnel — JPO 2026

@@ -4,6 +4,8 @@ jour_j: 2026-10-10
 brique: inscriptions
 version: 1
 maj: 2026-07-31
+lu:
+  00-fiche-identite.md: 1
 ---
 
 # Inscriptions, jauge & accueil — JPO 2026

@@ -63,8 +63,34 @@ avant signature ») mais le fichier n'a pas été repassé.
 la convention repose sur des sections « À faire remonter » que rien ne rejoue. Sur un
 dossier qui vit 3 à 6 mois, c'est le devis à 450 qui part en signature.
 
+Depuis que les briques renseignent `lu:`, **le défaut est détecté mécaniquement** — c'est
+précisément ce qu'il sert à démontrer :
+
+```
+$ python3 scripts/check_dossier.py jpo-800
+·  briques absentes : 01 (retroplanning), 06 (risques), 07 (debrief)
+·  jour J dans 71 jours (J-71)
+✗  lu: 03-prestataires.md a été écrit sur la base de 02-budget.md v1,
+   or 02-budget.md est en v3 — à repasser
+
+1 erreur(s) — voir ci-dessus.
+```
+
+**Ce jeu d'essai sort donc en exit 1, et c'est le comportement attendu.** Un jour où il
+sortira en exit 0, c'est que quelqu'un l'aura « réparé » — et il faudra alors soit revenir
+en arrière, soit réécrire ce README pour dire ce qu'il démontre à la place.
+
 Ne pas « corriger » ce fichier sans supprimer ce paragraphe — le jeu d'essai perdrait son
 intérêt principal.
+
+## Vérification
+
+```bash
+python3 <chemin-du-plugin>/scripts/check_dossier.py jpo-800
+```
+
+Attendu : **exit 1**, une seule erreur, celle du `lu:` périmé de `03-prestataires.md`.
+Toute autre erreur est une vraie régression.
 
 ## Ce qu'il ne faut pas y chercher
 
