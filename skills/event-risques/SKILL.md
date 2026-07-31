@@ -1,12 +1,12 @@
 ---
 name: event-risques
 description: >
-  A utiliser pour analyser les risques d'un evenement : quand l'utilisateur demande
+  À utiliser pour analyser les risques d'un événement : quand l'utilisateur demande
   une "cartographie des risques", une "matrice des risques", un "pre-mortem", un
-  "plan de traitement" ou de "coter les risques" d'un evenement. Brique autonome
-  (n'appelle aucune skill externe) calibree pour l'evenementiel : no-show
-  intervenant, panne technique, meteo, surete du public, depassement budgetaire.
-version: 0.1.0
+  "plan de traitement" ou de "coter les risques" d'un événement. Brique autonome
+  (n'appelle aucune skill externe) calibrée pour l'événementiel : no-show
+  intervenant, panne technique, météo, sûreté du public, dépassement budgétaire.
+version: 0.3.0
 ---
 
 # Cartographie des risques evenementiels

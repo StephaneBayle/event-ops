@@ -1,12 +1,13 @@
 ---
 name: event-dossier
 description: >
-  Skill chapeau. A utiliser quand l'utilisateur veut "le dossier complet", "le
-  dossier operationnel complet", "tout assembler", "generer le document final" ou
-  "produire le livrable" d'un evenement. Orchestre les cinq briques (cadrage,
-  retroplanning, conducteur, risques, debrief) et produit un dossier unique,
-  structure et stylise, pret a partager avec une equipe.
-version: 0.2.0
+  Skill chapeau. À utiliser quand l'utilisateur veut "le dossier complet", "le
+  dossier opérationnel complet", "tout assembler", "générer le document final" ou
+  "produire le livrable" d'un événement. Assemble toutes les briques (cadrage,
+  rétroplanning, budget, prestataires, inscriptions, conducteur, risques, débrief)
+  et produit un jeu de livrables structuré et stylisé, prêt à partager avec une
+  équipe.
+version: 0.3.0
 ---
 
 # Dossier operationnel complet

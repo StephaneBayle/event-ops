@@ -1,12 +1,12 @@
 ---
 name: event-debrief
 description: >
-  A utiliser pour la phase APRES un evenement : quand l'utilisateur demande un
-  "debrief", un "bilan", un "retour d'experience", un "AAR", un "after-action
-  review", un "bilan KPIs" ou la "cloture" d'un evenement. Transforme l'evenement
-  en actif reutilisable : cloture logistique, bilan KPIs vs objectifs, et debrief
-  structure.
-version: 0.1.0
+  À utiliser pour la phase APRÈS un événement : quand l'utilisateur demande un
+  "débrief", un "bilan", un "retour d'expérience", un "AAR", un "after-action
+  review", un "bilan KPIs" ou la "clôture" d'un événement. Transforme l'événement
+  en actif réutilisable : clôture logistique, bilan KPIs vs objectifs, et débrief
+  structuré.
+version: 0.3.0
 ---
 
 # Debrief & capitalisation

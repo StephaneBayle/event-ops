@@ -1,13 +1,13 @@
 ---
 name: event-cadrage
 description: >
-  Point d'entree d'un dossier evenementiel. A utiliser quand l'utilisateur veut
-  "lancer un nouvel evenement", "cadrer un evenement", "definir les objectifs d'un
-  evenement", "demarrer le dossier operationnel", ou fournit le nom/format d'un
-  evenement sans cadre encore pose. Produit la FICHE D'IDENTITE : objectifs
+  Point d'entrée d'un dossier événementiel. À utiliser quand l'utilisateur veut
+  "lancer un nouvel événement", "cadrer un événement", "définir les objectifs d'un
+  événement", "démarrer le dossier opérationnel", ou fournit le nom/format d'un
+  événement sans cadre encore posé. Produit la FICHE D'IDENTITÉ : objectifs
   mesurables, KPIs, public cible, format, budget, gouvernance. C'est l'ancre dont
-  toutes les autres briques dependent.
-version: 0.1.0
+  toutes les autres briques dépendent.
+version: 0.3.0
 ---
 
 # Cadrage d'evenement — Fiche d'identite

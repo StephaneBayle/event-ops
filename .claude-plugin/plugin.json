@@ -1,0 +1,8 @@
+{
+  "name": "event-ops",
+  "version": "0.3.0",
+  "description": "Dossier opérationnel d'événement : cadrage, rétroplanning + RACI, budget, prestataires, inscriptions, conducteur jour J, cartographie des risques, débrief AAR, et assemblage du dossier complet stylisé. Briques modulaires, sans dépendance externe.",
+  "author": { "name": "AI_LAB — Paddock Academy" },
+  "homepage": "https://github.com/StephaneBayle/event-ops",
+  "keywords": ["evenementiel", "gestion-de-projet", "raci", "conducteur", "run-of-show", "risques", "debrief", "aar", "budget", "prestataires", "inscriptions"]
+}

@@ -1,12 +1,12 @@
 ---
 name: event-conducteur
 description: >
-  A utiliser pour la phase PENDANT d'un evenement : quand l'utilisateur demande un
-  "conducteur", un "run of show", un "minutage du jour J", un "deroule", un "plan
-  de salle", un "annuaire jour J" ou des "procedures d'escalade". Produit la piece
-  maitresse de l'execution : sequencement minute, ressources, responsables, et
-  plans de repli.
-version: 0.1.0
+  À utiliser pour la phase PENDANT d'un événement : quand l'utilisateur demande un
+  "conducteur", un "run of show", un "minutage du jour J", un "déroulé", un "plan
+  de salle", un "annuaire jour J", des "tops régie" ou des "procédures d'escalade".
+  Produit la pièce maîtresse de l'exécution : séquencement minuté, tops régie,
+  ressources, responsables, et plans de repli.
+version: 0.3.0
 ---
 
 # Conducteur jour J (run of show)

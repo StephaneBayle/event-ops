@@ -1,12 +1,13 @@
 ---
 name: event-retroplanning
 description: >
-  A utiliser pour la phase AVANT d'un evenement : quand l'utilisateur demande un
-  "retroplanning", un "planning a rebours", "qui fait quoi", une "matrice RACI",
-  un "chemin critique", ou des "checklists J-30 / J-7 / J-1". Produit le plan de
-  preparation : retroplanning construit a rebours depuis le jour J, matrice RACI
-  par chantier, et checklists jalonnees.
-version: 0.2.0
+  À utiliser pour la phase AVANT d'un événement : quand l'utilisateur demande un
+  "rétroplanning", un "planning à rebours", "qui fait quoi", une "matrice RACI",
+  un "chemin critique", un "go/no-go", ou des "checklists J-30 / J-7 / J-1".
+  Produit le plan de préparation : rétroplanning construit à rebours depuis le
+  jour J, matrice RACI par chantier, jalon de décision go/no-go, et checklists
+  jalonnées.
+version: 0.3.0
 ---
 
 # Retroplanning, RACI & checklists
