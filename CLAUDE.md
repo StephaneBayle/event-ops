@@ -47,6 +47,26 @@ livrables, qui reste un jugement humain (test de l'étranger compétent) :
 Les deux derniers contrôles sont les plus utiles sur la durée : ce sont des
 **invariants dupliqués**, et tout invariant écrit à deux endroits finit par diverger.
 
+### Jeux d'essai
+
+`check_plugin.py` ne vérifie que la mécanique. Pour juger une modification de skill sur le
+fond, comparer sa sortie au **jeu d'essai de référence** — un dossier événement complet
+produit en déroulant les skills de bout en bout (journée portes ouvertes, 800 personnes) :
+
+```bash
+git worktree add ../event-ops-jeux-essai jeu-essai
+```
+
+Les jeux d'essai vivent sur la **branche orpheline `jeu-essai`**, jamais dans l'arbre de
+`main` : un plugin installé depuis git est cloné intégralement dans
+`~/.claude/plugins/cache/`, et aucun des deux manifestes n'offre de filtre de fichiers.
+Tout ce qu'on met ici part chez chaque membre de l'équipe. **Ne rien ajouter à la racine
+qui ne serve pas à l'exécution du plugin.**
+
+Le jeu d'essai `jpo-800` conserve **délibérément** une incohérence (`03-prestataires.md`
+à 450 couverts quand `02` et `05` sont à 380) : elle documente le seul défaut de fond du
+plugin — rien ne rejoue les sections « À faire remonter ». Son `README.md` l'explique.
+
 ### Ajouter une skill
 
 Trois endroits à mettre à jour, sinon le script échoue — c'est le but :
