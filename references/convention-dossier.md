@@ -73,6 +73,23 @@ maj: 2026-07-31
   l'équipe doit savoir quelle version elle tient en main le jour J.
 - `maj` — date de dernière modification.
 
+### `lu:` — champ optionnel, versions des dépendances
+
+Une brique peut consigner la version de chaque dépendance **au moment où elle a écrit** :
+
+```yaml
+lu:
+  00-fiche-identite.md: 1
+  02-budget.md: 3
+```
+
+C'est ce qui rend la péremption détectable sans interprétation : si `02-budget.md` est
+passé en v4 depuis, la brique qui déclare l'avoir lu en v3 est à repasser, et
+`scripts/check_dossier.py` le dit. Sans ce champ, le contrôle se rabat sur la comparaison
+des dates `maj`, qui rate tout ce qui se fait dans la même journée.
+
+Facultatif — un dossier qui ne le porte pas reste valide.
+
 ## Lire l'état du dossier
 
 Au démarrage, toute skill :

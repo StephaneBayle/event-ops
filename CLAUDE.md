@@ -47,6 +47,35 @@ livrables, qui reste un jugement humain (test de l'étranger compétent) :
 Les deux derniers contrôles sont les plus utiles sur la durée : ce sont des
 **invariants dupliqués**, et tout invariant écrit à deux endroits finit par diverger.
 
+### Vérifier un dossier produit
+
+`check_plugin.py` vérifie le **plugin**. Son pendant vérifie un **dossier événement réel** :
+
+```bash
+python3 scripts/check_dossier.py <chemin-du-dossier>
+```
+
+Sans argument, il cherche un `00-fiche-identite.md` dans le répertoire courant ou juste
+en dessous, et refuse de deviner si plusieurs dossiers sont candidats.
+
+Il lit le mapping index → brique et les dépendances **dans la table lit/écrit de la
+convention** — rien n'y est redéclaré, sinon le script deviendrait à son tour un invariant
+dupliqué. Il contrôle :
+
+- frontmatter complet, `brique` cohérente avec l'index, `version` entière, dates ISO ;
+- `evenement` et `jour_j` identiques partout, **la fiche d'identité faisant foi** ;
+- fichiers hors convention (mauvais index, mauvais nom) ;
+- **fraîcheur** — une brique plus ancienne que ce dont elle dépend est signalée, avec un
+  message dédié pour le cycle `02` ↔ `03` ;
+- **péremption exacte** quand le champ optionnel `lu:` est renseigné (voir la convention) ;
+- livrables générés plus anciens qu'une brique source.
+
+Ce qui relève de l'information et **jamais de l'erreur** : les briques absentes. La
+convention est explicite — une dépendance absente n'est jamais bloquante.
+
+Il n'est pas en CI : il n'y a pas de dossier dans le dépôt. Pour l'exercer, le lancer sur
+le jeu d'essai ci-dessous.
+
 ### Jeux d'essai
 
 `check_plugin.py` ne vérifie que la mécanique. Pour juger une modification de skill sur le
