@@ -18,6 +18,7 @@ du plugin en même temps :
 | **Accessibilité PMR** | `00` § 6 (alerte de cadrage), `02` poste 5, `05` § 7 |
 | **Sûreté de foule** | `03` § 4-5 (dimensionnement des agents), `05` § 4 (escalade) |
 | **Budget avec garantie traiteur** | `02` F01, `03` § 2-3, **`04` § 4 (la décision)** |
+| **Conformité d'un site non ERP** | `08` — utilisation exceptionnelle, effectif à faire fixer |
 
 Le site est un **site industriel ouvert au public pour la journée** : il n'est pas ERP en
 fonctionnement normal, il n'est pas accessible par construction, et il n'a jamais accueilli
@@ -52,6 +53,31 @@ le trou dans la numérotation rend l'incomplétude du dossier lisible sur un sim
    (`05` → v2).
 4. **Le versionnement du conducteur est utilisable.** `05` v2 porte en tête « v2 —
    31/07/2026 » et une table des sept changements depuis la v1.
+
+## Le registre de conformité, et le doublon assumé
+
+`08-conformite.md` a été ajouté **après** que le reste du dossier a été produit — le cas
+réel de l'arrivée d'une nouvelle brique dans un dossier existant. Il en résulte un
+doublon visible et voulu : `00` § 6 porte toujours son tableau réglementaire, écrit
+quand aucune brique ne possédait le sujet.
+
+**Ce doublon est le comportement correct, pas un défaut.** Réduire `00` § 6 au premier
+repérage suppose de repasser `event-cadrage`, donc de faire passer la fiche en v2 — ce
+qui périmerait d'un coup les quatre briques qui la lisent. La convention est claire : ça
+se fait par une passe assumée, pas par une retouche silencieuse. Le dossier montre donc
+l'état intermédiaire, qui est celui que rencontrera n'importe quelle équipe mettant le
+plugin à jour.
+
+Ce que `08` démontre par ailleurs :
+
+- **Un déclencheur à deux conditions reste indéterminé** plutôt que tranché au jugé. Le
+  régime « grands rassemblements » n'est ni applicable ni écarté : le but lucratif d'une
+  journée portes ouvertes gratuite n'est pas évident, et la question part à la mairie.
+- **Deux lignes sans vérificateur nommé sont listées comme des trous**, pas comme des
+  lignes en cours. Elles renvoient à la gouvernance de `00` § 7, qui ne désigne pas de
+  référent données.
+- **Aucune ligne n'est marquée « conforme ».** `check_dossier.py` le vérifie
+  mécaniquement depuis la v0.5.0 : le vocabulaire des statuts est une liste blanche.
 
 ## Le défaut délibérément conservé
 
@@ -102,6 +128,10 @@ python3 <chemin-du-plugin>/scripts/check_dossier.py jpo-800
 Attendu : **exit 1**, une seule erreur, celle du `lu:` périmé de `03-prestataires.md`,
 plus les deux avertissements de cycle ci-dessus. Toute **erreur** supplémentaire est une
 vraie régression.
+
+Le dossier porte un `.gitignore` excluant `livrables/` : sans lui, `check_dossier.py`
+avertit qu'un dossier versionné expose des coordonnées dans un historique qui ne se purge
+pas. Le retirer est un bon moyen de vérifier que ce contrôle est vivant.
 
 ## Ce qu'il ne faut pas y chercher
 

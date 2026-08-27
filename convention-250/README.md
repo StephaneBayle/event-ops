@@ -20,6 +20,7 @@ la cible et sollicite ce que le premier ne touche pas :
 | **Gouvernance manquante** | `00` § 7 — le pouvoir d'annuler n'a pas de titulaire |
 | **Consultation non lancée** | `03` — CDC rédigés, grille comparative **vide** |
 | **Incertitude TVA non levée** | `02` § 4 — elle double l'ampleur du dépassement |
+| **Conformité d'un lieu qui porte son régime** | `08` — huit régimes écartés avec motif |
 
 ## Ordre de production
 
@@ -73,6 +74,30 @@ disparaître **sans message**.
 `02` v2 chiffre la révision ligne à ligne (−1 590 € sur la restauration) **et constate que
 rien d'autre n'a changé**, parce que `03` ne porte encore aucun montant négocié. Un budget
 repassé qui n'aurait rien à dire serait un budget qui n'a pas regardé.
+
+### 5. Un registre de conformité peut être entièrement tranché
+
+`08-conformite.md` est le pendant exact de celui de `jpo-800`, et l'opposition est le
+plus utile de la paire :
+
+| | `jpo-800` | `convention-250` |
+|---|---|---|
+| Lieu | Site industriel, non ERP en usage normal | Lieu de congrès, déjà ERP |
+| Régime structurant | Utilisation exceptionnelle — instruction longue, bloquante | Aucun : le lieu porte son régime |
+| Ce qui pèse | Faire autoriser l'ouverture | L'hybride — captation, replay, données |
+| Indéterminés | 2 | **0** |
+| Lignes sans vérificateur | 2 | **0** |
+
+**Zéro indéterminé n'est pas un signe de complaisance** : c'est ce que permet un lieu
+qui porte déjà son régime, et les huit régimes écartés le sont **avec leur motif**. Deux
+d'entre eux sont explicitement signalés comme à rouvrir si le format bouge — une
+convention qui deviendrait payante ferait changer de réponse la première condition du
+régime « grands rassemblements ».
+
+Le seul trou est ailleurs, et le registre le dit sans le corriger lui-même : `00` § 7 ne
+désigne toujours pas qui a le pouvoir d'annuler. Le registre sait qui **vérifie**, pas
+qui **décide** — et il propose de repasser `event-cadrage` plutôt que d'écrire dans le
+fichier d'une autre brique.
 
 ## Ce qu'il ne faut pas y chercher
 
