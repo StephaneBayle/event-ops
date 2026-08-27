@@ -6,7 +6,7 @@ description: >
   de salle", un "annuaire jour J", des "tops régie" ou des "procédures d'escalade".
   Produit la pièce maîtresse de l'exécution : séquencement minuté, tops régie,
   ressources, responsables, et plans de repli.
-version: 0.4.0
+version: 0.4.1
 ---
 
 # Conducteur jour J (run of show)

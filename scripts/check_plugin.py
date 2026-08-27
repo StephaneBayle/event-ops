@@ -24,6 +24,14 @@ SKILLS_DIR = ROOT / "skills"
 CONVENTION = ROOT / "references" / "convention-dossier.md"
 README = ROOT / "README.md"
 
+# Nombres écrits en toutes lettres, pour les comptes annoncés en prose.
+# Triés du plus long au plus court à l'usage : « dix-sept » avant « dix ».
+MOTS = {
+    "cinq": 5, "six": 6, "sept": 7, "huit": 8, "neuf": 9, "dix": 10,
+    "onze": 11, "douze": 12, "treize": 13, "quatorze": 14, "quinze": 15,
+    "seize": 16, "dix-sept": 17, "dix-huit": 18,
+}
+
 errors: list[str] = []
 warnings: list[str] = []
 
@@ -65,6 +73,16 @@ else:
         home = manifest.get("homepage", "")
         if re.search(r"REMPLACER|REPLACE|TODO|XXX|example\.com", home, re.I):
             err("manifeste", f"homepage contient un placeholder — {home!r}")
+
+        # Licence : le champ et le fichier se répondent, ou ni l'un ni l'autre.
+        # Un dépôt public sans licence est « tous droits réservés » — ce qui
+        # contredit le README, qui invite à installer le plugin depuis git.
+        licence = manifest.get("license")
+        fichier_licence = (ROOT / "LICENSE").exists()
+        if licence and not fichier_licence:
+            err("licence", f"le manifeste annonce '{licence}' mais LICENSE est absent")
+        elif fichier_licence and not licence:
+            err("licence", "LICENSE existe mais le manifeste ne déclare pas de 'license'")
 
 
 # --- 1 bis. Marketplace ------------------------------------------------------
@@ -347,17 +365,65 @@ elif skill_names:
         if cited not in skill_names:
             err("readme", f"{cited} est citée mais n'existe pas dans skills/")
     # Compte annoncé en toutes lettres.
-    mots = {
-        "six": 6, "sept": 7, "huit": 8, "neuf": 9, "dix": 10,
-        "onze": 11, "douze": 12,
-    }
     m = re.search(r"##\s+Les\s+([a-zé]+)\s+briques", readme, re.I)
     if m:
-        annonce = mots.get(m.group(1).lower())
+        annonce = MOTS.get(m.group(1).lower())
         if annonce is None:
             warn("readme", f"nombre de briques « {m.group(1)} » non reconnu")
         elif annonce != len(skill_names):
             err("readme", f"annonce « {m.group(1)} briques » mais il y en a {len(skill_names)}")
+
+
+# --- 6. references/chantiers.md : comptes annoncés et skills nommées ---------
+# Même classe de bug que « les six briques » du README, mais plus coûteuse : les
+# skills doivent PARCOURIR ce fichier entrée par entrée. Un compte faux et elles
+# en sautent une, sans que rien ne le signale. Les deux comptes sont annoncés à
+# quatre endroits au total — invariant dupliqué, donc à épingler.
+
+CHANTIERS = ROOT / "references" / "chantiers.md"
+if not CHANTIERS.exists():
+    err("chantiers", "references/chantiers.md absent")
+else:
+    ch = CHANTIERS.read_text(encoding="utf-8")
+
+    # Ce que le fichier contient réellement, section par section.
+    reels: dict[str, int] = {}
+    for sec in re.split(r"^## ", ch, flags=re.M):
+        titre = sec.split("\n", 1)[0].lower()
+        n = len(re.findall(r"^\d+\. \*\*", sec, re.M))
+        for nom in ("lentilles", "domaines"):
+            if nom in titre and n:
+                reels[nom] = n
+
+    mots_alt = "|".join(sorted(MOTS, key=len, reverse=True))
+    for nom in ("lentilles", "domaines"):
+        if nom not in reels:
+            err("chantiers", f"aucune section ne numérote les {nom}")
+            continue
+        for m in re.finditer(rf"\b([0-9]+|{mots_alt})\s+{nom}\b", ch, re.I):
+            mot = m.group(1)
+            annonce = int(mot) if mot.isdigit() else MOTS[mot.lower()]
+            if annonce != reels[nom]:
+                err(
+                    "chantiers",
+                    f"« {m.group(0)} » annoncé alors que le fichier en liste {reels[nom]}",
+                )
+
+    # Le fichier nomme les skills censées le parcourir. Si l'une d'elles cesse
+    # d'y renvoyer, elle improvise de mémoire — ce que la skill s'interdit.
+    nommees = set()
+    entete = ch.split("---", 1)[0]
+    for m in re.finditer(r"`(event-[a-z]+)`", entete):
+        nommees.add(m.group(1))
+    for nom in sorted(nommees):
+        d = SKILLS_DIR / nom
+        if not (d / "SKILL.md").exists():
+            err("chantiers", f"{nom} est nommée mais n'existe pas dans skills/")
+        elif "references/chantiers.md" not in (d / "SKILL.md").read_text(encoding="utf-8"):
+            err(
+                "chantiers",
+                f"{nom} doit parcourir chantiers.md mais ne le référence pas",
+            )
 
 
 # --- Rapport -----------------------------------------------------------------

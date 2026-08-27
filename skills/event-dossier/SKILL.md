@@ -7,7 +7,7 @@ description: >
   rétroplanning, budget, prestataires, inscriptions, conducteur, risques, débrief)
   et produit un jeu de livrables structuré et stylisé, prêt à partager avec une
   équipe.
-version: 0.4.0
+version: 0.4.1
 ---
 
 # Dossier opérationnel complet

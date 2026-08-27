@@ -15,6 +15,7 @@ Plugin Claude pour la gestion d'événements et la production de dossiers opéra
   - `chantiers.md` — taxonomie des domaines + lentilles de complétude.
   - `convention-dossier.md` — convention du dossier événement persistant.
 - `scripts/check_plugin.py` — vérification structurelle (voir ci-dessous).
+- `scripts/bump_version.py` — change la version aux douze endroits à la fois.
 
 ## Vérification
 
@@ -54,6 +55,11 @@ livrables, qui reste un jugement humain (test de l'étranger compétent) :
   instruction `lu:` — correspondent à la colonne « Lit » de la convention. Sans lui,
   `event-budget` demandait de consigner la lecture d'un fichier qu'il n'avait jamais dit
   de lire.
+- Les comptes annoncés par `references/chantiers.md` — « 7 lentilles », « 16 domaines »,
+  répétés à quatre endroits — correspondent à ce que le fichier liste vraiment, et les
+  skills qu'il nomme le référencent effectivement. *Même classe de bug que « les six
+  briques » du README, mais plus coûteuse : les skills doivent le parcourir entrée par
+  entrée, et un compte faux leur en fait sauter une sans que rien ne le signale.*
 
 Les quatre derniers contrôles sont les plus utiles sur la durée : ce sont des
 **invariants dupliqués**, et tout invariant écrit à deux endroits finit par diverger.
@@ -115,6 +121,20 @@ qui ne serve pas à l'exécution du plugin.**
 Le jeu d'essai `jpo-800` conserve **délibérément** une incohérence (`03-prestataires.md`
 à 450 couverts quand `02` et `05` sont à 380) : elle documente le seul défaut de fond du
 plugin — rien ne rejoue les sections « À faire remonter ». Son `README.md` l'explique.
+
+### Changer de version
+
+La version vit à **douze endroits** : le manifeste, les deux champs de `marketplace.json`,
+et le frontmatter des neuf skills. Ne pas les modifier à la main :
+
+```bash
+python3 scripts/bump_version.py --patch     # ou --minor, --major, ou 0.5.0
+```
+
+Le manifeste fait foi pour la version courante. Le script ne remplace **que** là où la
+valeur est déjà cette version : un fichier désaligné n'est pas rattrapé en silence, il
+est signalé — son écart pose une question à laquelle le script n'a pas la réponse.
+`--dry-run` n'écrit rien.
 
 ### Ajouter une skill
 

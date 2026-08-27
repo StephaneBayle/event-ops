@@ -3,7 +3,7 @@
 Source de vérité unique du plugin event-ops. Les skills `event-retroplanning`,
 `event-budget` et `event-dossier` doivent **PARCOURIR ce fichier entrée par entrée**,
 et non le résumer de mémoire. La complétude ne vient pas de la longueur d'une liste
-mais de la diversité des angles d'attaque : applique les plusieurs lentilles ci-dessous.
+mais de la diversité des angles d'attaque : applique les sept lentilles ci-dessous.
 
 ---
 

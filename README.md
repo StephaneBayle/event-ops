@@ -98,3 +98,8 @@ conducteur ») sans passer par les autres.
   servent à révéler les manques, pas à produire un document rassurant.
 - **Outil opérationnel réel.** Les dossiers produits servent à monter de vrais
   événements — d'où la rigueur exigée sur le budget, la sécurité et l'accessibilité.
+
+## Licence
+
+MIT — voir [LICENSE](LICENSE). Reprends-le, modifie-le, adapte-le à ton contexte ;
+conserve seulement la mention de copyright.
