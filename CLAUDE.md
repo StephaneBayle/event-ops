@@ -97,6 +97,13 @@ dupliqué. Il contrôle :
 Ce qui relève de l'information et **jamais de l'erreur** : les briques absentes. La
 convention est explicite — une dépendance absente n'est jamais bloquante.
 
+`--no-annotations` supprime les lignes `::error::` / `::warning::` de GitHub Actions.
+Indispensable quand la CI vérifie une sortie **attendue en erreur** : sans lui la course
+s'affiche en rouge alors qu'elle valide le comportement nominal, **et** les annotations
+polluent la sortie qu'on analyse. Ne pas essayer de s'en passer en forçant
+`GITHUB_ACTIONS=false` dans le `env:` d'une étape — c'est une variable réservée, le runner
+la réinjecte, et l'override passe inaperçu.
+
 Il tourne en CI sur le **jeu d'essai** de la branche orpheline (job `jeu-essai`), qui est
 son seul test de bout en bout : la course récupère la branche, lance le script sur
 `jpo-800` et exige exit 1 avec la seule erreur que son `README` documente. Sans ce job,

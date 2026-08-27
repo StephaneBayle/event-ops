@@ -11,8 +11,14 @@ Le mapping index → brique et les dépendances sont lus dans la table lit/écri
 references/convention-dossier.md : rien n'est redéclaré ici, sinon ce script
 deviendrait à son tour un invariant dupliqué.
 
-Usage :  python3 scripts/check_dossier.py [chemin-du-dossier] [--quiet]
+Usage :  python3 scripts/check_dossier.py [chemin-du-dossier] [--quiet] [--no-annotations]
 Sortie :  0 si aucune erreur (des avertissements restent possibles), 1 sinon.
+
+`--no-annotations` supprime les lignes `::error::` / `::warning::` destinées à GitHub
+Actions. Nécessaire quand la CI vérifie une sortie ATTENDUE en erreur : sans lui la
+course s'affiche en rouge alors qu'elle valide le comportement nominal. On ne peut pas
+s'en passer en forçant GITHUB_ACTIONS=false — c'est une variable réservée, que le runner
+réinjecte quoi qu'on écrive dans le `env:` de l'étape.
 """
 
 from __future__ import annotations
@@ -346,7 +352,7 @@ for name, d in meta.items():
 # --- Rapport -----------------------------------------------------------------
 
 quiet = "--quiet" in sys.argv
-ci = os.environ.get("GITHUB_ACTIONS") == "true"
+ci = os.environ.get("GITHUB_ACTIONS") == "true" and "--no-annotations" not in sys.argv
 
 for i in infos:
     if not quiet:

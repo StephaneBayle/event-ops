@@ -40,18 +40,18 @@ jobs:
           git worktree add ../jeux-essai jeu-essai
 
       - name: jpo-800 sort en exit 1, avec sa seule erreur documentée
-        # L'erreur est ATTENDUE : on neutralise les annotations du script, sinon la
-        # course apparaît en rouge alors qu'elle valide le comportement nominal.
-        env:
-          GITHUB_ACTIONS: "false"
+        # L'erreur est ATTENDUE : `--no-annotations` évite que la course s'affiche en
+        # rouge alors qu'elle valide le comportement nominal. Ne PAS tenter de forcer
+        # GITHUB_ACTIONS=false ici — c'est une variable réservée, le runner la
+        # réinjecte, et les annotations reviennent dans la sortie qu'on analyse.
         run: |
           set +e
-          sortie=$(python3 scripts/check_dossier.py ../jeux-essai/jpo-800 2>&1)
+          sortie=$(python3 scripts/check_dossier.py ../jeux-essai/jpo-800 --no-annotations 2>&1)
           code=$?
           set -e
           printf '%s\n' "$sortie"
           [ "$code" -eq 1 ] || { echo "::error::attendu exit 1, obtenu $code"; exit 1; }
-          erreurs=$(printf '%s\n' "$sortie" | grep -c '^✗' || true)
+          erreurs=$(printf '%s\n' "$sortie" | grep -c '^✗' || true)  # ancré : une annotation porte le même texte
           [ "$erreurs" -eq 1 ] || { echo "::error::attendu 1 erreur, obtenu $erreurs"; exit 1; }
           printf '%s\n' "$sortie" | grep -q '03-prestataires.md' \
             || { echo "::error::l'erreur attendue ne porte pas sur 03-prestataires.md"; exit 1; }
@@ -61,16 +61,14 @@ jobs:
         # Le pendant sain de jpo-800. Il verrouille la propriété qui manquait le plus :
         # un dossier correctement tenu PEUT être vert. Avant la correction du cycle
         # 02↔03, aucun dossier réel ne le pouvait.
-        env:
-          GITHUB_ACTIONS: "false"
         run: |
           set +e
-          sortie=$(python3 scripts/check_dossier.py ../jeux-essai/convention-250 2>&1)
+          sortie=$(python3 scripts/check_dossier.py ../jeux-essai/convention-250 --no-annotations 2>&1)
           code=$?
           set -e
           printf '%s\n' "$sortie"
           [ "$code" -eq 0 ] || { echo "::error::attendu exit 0, obtenu $code"; exit 1; }
-          cycles=$(printf '%s\n' "$sortie" | grep -c 'cycle 0' || true)
+          cycles=$(printf '%s\n' "$sortie" | grep -c '^⚠  cycle 0' || true)
           # Si les avertissements disparaissent, ce n'est pas une bonne nouvelle :
           # c'est que la détection des cycles a cessé de fonctionner.
           [ "$cycles" -eq 2 ] || { echo "::error::attendu 2 avertissements de cycle, obtenu $cycles"; exit 1; }
