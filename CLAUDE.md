@@ -47,8 +47,15 @@ livrables, qui reste un jugement humain (test de l'étranger compétent) :
   elle dépend d'une autre brique, la mention explicite « pas de champ `lu:` » sinon.
   Le contrôle vérifie l'instruction, **pas le comportement** — `lu:` reste une
   déclaration, pas une mesure.
+- Aucune skill ne montre `lu:` **sur une seule ligne**. `check_dossier.py` ne relit que la
+  forme bloc ; la forme sur une ligne fait disparaître le contrôle de péremption **sans
+  message**, ce qui est pire que de ne pas l'avoir. Deux skills l'ont enseignée.
+- Les dépendances qu'une skill énumère — dans sa phrase « Lis … » **et** dans son
+  instruction `lu:` — correspondent à la colonne « Lit » de la convention. Sans lui,
+  `event-budget` demandait de consigner la lecture d'un fichier qu'il n'avait jamais dit
+  de lire.
 
-Les deux derniers contrôles sont les plus utiles sur la durée : ce sont des
+Les quatre derniers contrôles sont les plus utiles sur la durée : ce sont des
 **invariants dupliqués**, et tout invariant écrit à deux endroits finit par diverger.
 
 ### Vérifier un dossier produit
@@ -73,13 +80,21 @@ dupliqué. Il contrôle :
   message dédié pour le cycle `02` ↔ `03` ;
 - **péremption exacte** via le champ `lu:`, que chaque brique renseigne avec la version
   de ses dépendances au moment où elle écrit (voir la convention) ;
+- **les cycles**, déduits de la table (`02`↔`03`, `02`↔`04`, `04`↔`05`) et jamais
+  redéclarés. Sur une paire mutuelle, les deux briques ne peuvent pas être à jour l'une de
+  l'autre en même temps : un retard d'**une** version est le coût structurel du cycle et
+  ne sort qu'en avertissement ; **deux ou plus** reste une erreur. Sans cette nuance le
+  contrôle ne pouvait jamais être vert, et on apprend vite à ignorer un outil qui crie
+  toujours ;
 - livrables générés plus anciens qu'une brique source.
 
 Ce qui relève de l'information et **jamais de l'erreur** : les briques absentes. La
 convention est explicite — une dépendance absente n'est jamais bloquante.
 
-Il n'est pas en CI : il n'y a pas de dossier dans le dépôt. Pour l'exercer, le lancer sur
-le jeu d'essai ci-dessous.
+Il tourne en CI sur le **jeu d'essai** de la branche orpheline (job `jeu-essai`), qui est
+son seul test de bout en bout : la course récupère la branche, lance le script sur
+`jpo-800` et exige exit 1 avec la seule erreur que son `README` documente. Sans ce job,
+deux défauts silencieux y étaient déjà passés inaperçus.
 
 ### Jeux d'essai
 
@@ -108,7 +123,9 @@ Trois endroits à mettre à jour, sinon le script échoue — c'est le but :
 et le tableau du `README.md`.
 
 Dans le `SKILL.md`, ne pas oublier le champ `lu:` : l'instruction de le renseigner, ou la
-mention explicite qu'il n'y en a pas. Le linter refuse le silence sur ce point.
+mention explicite qu'il n'y en a pas. Le linter refuse le silence sur ce point — et il
+exige que les dépendances énumérées aux **deux** endroits (la phrase « Lis … » et
+l'instruction `lu:`) soient exactement celles de la colonne « Lit ».
 
 ## Principes de conception
 

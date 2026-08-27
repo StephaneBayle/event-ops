@@ -44,6 +44,7 @@ Si plusieurs dossiers candidats existent, demander lequel plutôt que de deviner
 └── livrables/               ← event-dossier       (généré, jamais édité à la main)
     ├── dossier.html
     ├── conducteur-a4.html
+    ├── checklists.html
     ├── budget.xlsx
     └── annuaire.html
 ```
@@ -89,6 +90,11 @@ seulement : `event-cadrage`, qui est l'ancre et ne dépend de rien, et `event-do
 dont les livrables ne portent pas de frontmatter — celui-ci fait figurer les versions
 sources **sur le livrable lui-même**.
 
+**La forme bloc ci-dessus est la seule lue.** `lu:` seul sur sa ligne, puis une ligne
+indentée par dépendance. Une écriture sur une seule ligne (`lu:` suivi d'accolades) n'est
+pas relue par `scripts/check_dossier.py` : le contrôle de péremption disparaît alors sans
+message, ce qui est pire que de ne pas l'avoir.
+
 Un dossier antérieur à cette règle et qui ne porte pas `lu:` reste valide — le contrôle
 se rabat sur les dates `maj`, en moins précis.
 
@@ -109,7 +115,7 @@ Au démarrage, toute skill :
 | `event-retroplanning` | `00` | `01-retroplanning.md` |
 | `event-budget` | `00`, `03`, `04` | `02-budget.md` |
 | `event-prestataires` | `00`, `02` | `03-prestataires.md` |
-| `event-inscriptions` | `00` | `04-inscriptions.md` |
+| `event-inscriptions` | `00`, `02`, `03`, `05` | `04-inscriptions.md` |
 | `event-conducteur` | `00`, `01`, `03`, `04` | `05-conducteur.md` |
 | `event-risques` | tous ceux présents | `06-risques.md` |
 | `event-debrief` | tous ceux présents | `07-debrief.md` |
@@ -142,6 +148,14 @@ La révision doit dire **ce qui a bougé et pourquoi**, ligne à ligne. Un écar
 de zéro cache souvent deux erreurs de sens contraire qui s'annulent : c'est justement
 l'information qu'on cherche.
 
+**Ce qu'un cycle fait au champ `lu:`.** Sur une paire mutuelle, les deux briques ne peuvent
+pas être à jour l'une de l'autre en même temps : celle qui n'a pas été écrite en dernier
+porte forcément le `lu:` de la version précédente de l'autre. Ce retard d'**une** version
+est le coût normal du cycle, et `scripts/check_dossier.py` ne le compte que comme
+avertissement. Un retard de **deux versions ou plus** reste une erreur : cette fois la
+brique a réellement manqué une passe. Les paires mutuelles se déduisent de la table
+ci-dessus (`02` ↔ `03`, `02` ↔ `04`, `04` ↔ `05`) — elles n'ont pas à y être redéclarées.
+
 Même logique, plus dangereuse, pour la **garantie traiteur** : `02` peut la poser en
 hypothèse faute de `04-inscriptions.md`, `03` la reprend dans le cahier des charges, un
 devis l'inscrit et un acompte la fige — sans que son propriétaire légitime l'ait jamais
@@ -166,6 +180,10 @@ validée. Une valeur estimée par une brique qui n'en est pas propriétaire doit
 
 | Date | Décision | Qui | Impact |
 |---|---|---|---|
+
+**Seule `event-cadrage` y écrit** — `00-fiche-identite.md` est son fichier. Toute autre
+brique qui assiste à un arbitrage structurant ne le consigne pas elle-même : elle propose
+de repasser `event-cadrage` pour l'ajouter au journal.
 
 Y consigner les arbitrages structurants (changement de lieu, de date, de jauge, coupe
 budgétaire, go/no-go). C'est ce qui permet, trois mois plus tard, de répondre à

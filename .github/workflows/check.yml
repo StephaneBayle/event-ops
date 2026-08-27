@@ -20,3 +20,39 @@ jobs:
       # Aucune dépendance : le script n'utilise que la bibliothèque standard.
       - name: Vérifier la structure du plugin
         run: python3 scripts/check_plugin.py
+
+  jeu-essai:
+    name: Jeu d'essai (check_dossier)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Les jeux d'essai vivent sur une branche orpheline : hors du tree distribué du
+      # plugin, mais c'est le seul test de bout en bout de check_dossier.py. Sans ce
+      # job, deux défauts silencieux y sont déjà passés inaperçus.
+      - name: Récupérer la branche orpheline
+        run: |
+          git fetch --no-tags --depth=1 origin jeu-essai:jeu-essai
+          git worktree add ../jeux-essai jeu-essai
+
+      - name: jpo-800 sort en exit 1, avec sa seule erreur documentée
+        # L'erreur est ATTENDUE : on neutralise les annotations du script, sinon la
+        # course apparaît en rouge alors qu'elle valide le comportement nominal.
+        env:
+          GITHUB_ACTIONS: "false"
+        run: |
+          set +e
+          sortie=$(python3 scripts/check_dossier.py ../jeux-essai/jpo-800 2>&1)
+          code=$?
+          set -e
+          printf '%s\n' "$sortie"
+          [ "$code" -eq 1 ] || { echo "::error::attendu exit 1, obtenu $code"; exit 1; }
+          erreurs=$(printf '%s\n' "$sortie" | grep -c '^✗' || true)
+          [ "$erreurs" -eq 1 ] || { echo "::error::attendu 1 erreur, obtenu $erreurs"; exit 1; }
+          printf '%s\n' "$sortie" | grep -q '03-prestataires.md' \
+            || { echo "::error::l'erreur attendue ne porte pas sur 03-prestataires.md"; exit 1; }
+          echo "✓ jeu d'essai conforme à son README"

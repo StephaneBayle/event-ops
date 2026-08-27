@@ -8,7 +8,7 @@ description: >
   sécurité, mobilier, signalétique, photographe, agence. Couvre la chaîne complète :
   sourcing, cahier des charges, comparaison de devis, contractualisation, briefing,
   réception de prestation.
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Prestataires — du cahier des charges à la réception
@@ -113,13 +113,13 @@ prestataire, tenant sur une page :
 ### 5. Réceptionner
 
 Le jour J et après : conformité au CDC, écarts constatés, incidents, validation du
-service fait avant paiement du solde, éléments à retenir pour le débrief (à faire
-remonter dans la section « à réutiliser » de `07-debrief.md`).
+service fait avant paiement du solde, éléments à retenir pour le débrief — note-les ici,
+`event-debrief` viendra les chercher pour sa section « à réutiliser ».
 
 ## Points de vigilance
 
-- **Prestataire unique sans doublure** = point de défaillance unique. Signale-le et
-  fais-le remonter dans `06-risques.md`.
+- **Prestataire unique sans doublure** = point de défaillance unique. Signale-le et propose de
+  repasser `event-risques` — c'est elle qui écrit le registre.
 - **Acomptes versés** : ils transforment un no-go en perte sèche. Leur montant cumulé
   et leur date doivent être visibles dans le budget et peser dans le go/no-go.
 - **Sous-traitance en cascade** : le prestataire que tu as choisi n'est pas toujours

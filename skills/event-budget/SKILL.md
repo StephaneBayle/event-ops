@@ -7,7 +7,7 @@ description: >
   dépense", de "HT ou TTC", de "reste à engager", de "dépassement" ou veut un
   "budget en Excel". Produit un budget structuré ligne à ligne avec suivi
   budgété / engagé / réalisé, gestion HT-TTC et provision pour aléas.
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Budget événementiel
@@ -20,8 +20,9 @@ qu'est-ce qu'il me reste ».
 ## Dossier
 
 OUVRE `${CLAUDE_PLUGIN_ROOT}/references/convention-dossier.md` et applique-la.
-Lis `00-fiche-identite.md` (enveloppe et objectifs) et `03-prestataires.md` (montants
-réellement négociés) ; écris `02-budget.md`.
+Lis `00-fiche-identite.md` (enveloppe et objectifs), `03-prestataires.md` (montants
+réellement négociés) et `04-inscriptions.md` (jauge et garantie traiteur) ; écris
+`02-budget.md`.
 
 **Renseigne le champ `lu:`** du frontmatter avec la version de chaque fichier que tu as
 effectivement lu : `00-fiche-identite.md`, `03-prestataires.md` et `04-inscriptions.md`.
@@ -92,7 +93,8 @@ Distinguer **acquis / promis / espéré** — un sponsor « intéressé » n'est
 - **Prestataires** — les montants négociés de `03-prestataires.md` remplacent les
   estimations. Signale les écarts estimation → devis, ils sont instructifs.
 - **Go/no-go** — l'engagé cumulé et les acomptes non remboursables sont un critère
-  de décision. Fais-les remonter au rétroplanning.
+  de décision. Signale qu'il faut repasser `event-retroplanning` pour les intégrer
+  au critère du jalon.
 - **Risques** — un dépassement probable est un risque financier à coter dans
   `06-risques.md`.
 

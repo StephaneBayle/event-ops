@@ -7,7 +7,7 @@ description: >
   Produit le plan de préparation : rétroplanning construit à rebours depuis le
   jour J, matrice RACI par chantier, jalon de décision go/no-go, et checklists
   jalonnées.
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Rétroplanning, RACI & checklists
@@ -21,7 +21,10 @@ OUVRE `${CLAUDE_PLUGIN_ROOT}/references/convention-dossier.md` et applique-la.
 Lis `00-fiche-identite.md` (l'ancre) avant de produire, écris `01-retroplanning.md` après.
 
 **Renseigne le champ `lu:`** du frontmatter avec la version de chaque fichier que tu as
-effectivement lu : `lu: {00-fiche-identite.md: <version>}`.
+effectivement lu : `00-fiche-identite.md`.
+Respecte la forme **bloc** de la convention — `lu:` seul sur sa ligne, puis une ligne
+indentée par dépendance. Une écriture sur une seule ligne n'est pas relue par
+`scripts/check_dossier.py` : le contrôle de péremption disparaît alors sans un mot.
 C'est ce qui permet de détecter plus tard que tu as travaillé sur une version périmée —
 sans lui, personne ne sait sur quoi tu t'es appuyé.
 
