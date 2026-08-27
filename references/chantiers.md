@@ -30,7 +30,9 @@ Pour chaque lentille, le manque qu'elle attrape est différent. Ne pas en sauter
    autres ratent, parce que l'obligation ne se manifeste jamais dans le déroulé —
    elle se manifeste en contrôle, en refus d'ouverture, ou en responsabilité engagée.
    **Ne jamais affirmer une règle de droit dont on n'est pas sûr** : signaler qu'une
-   vérification humaine est nécessaire.
+   vérification humaine est nécessaire. Le détail des régimes applicables, de leurs
+   délais et des pièces à produire vit dans `references/conformite.md` ; cette lentille
+   sert à repérer le déclencheur, ce fichier-là à instruire.
 7. **Étranger compétent** — un tiers pourrait-il exécuter avec ce seul dossier ?
    Chaque question qu'il devrait poser pointe un trou.
 
@@ -68,10 +70,17 @@ trous détectés. Ne jamais masquer un manque.
    live), aval (compte rendu, photos/vidéo), relations presse.
 10. **Partenariats & sponsors** — contreparties, visibilité, intégration au programme.
 11. **Sécurité & sûreté** — sûreté du public, dispositif de secours/médical,
-    évacuation, contrôle d'accès, jauge réglementaire, assurances.
+    évacuation et dégagements, service de sécurité incendie, contrôle d'accès et
+    filtrage, agents de sécurité et leurs habilitations, jauge réglementaire et
+    effectif maximal autorisé, assurances et attestations des prestataires.
 12. **Juridique & conformité** — contrats prestataires, droit à l'image, RGPD,
-    autorisations et déclarations (voie publique, débit de boissons, SACEM,
-    commission de sécurité).
+    hygiène alimentaire et allergènes, droit du travail des intervenants extérieurs,
+    autorisations et déclarations (utilisation exceptionnelle d'un local, voie
+    publique, débit de boissons, SACEM, commission de sécurité).
+    *Domaine dont la matière ne tient pas dans une ligne : le détail régime par
+    régime — déclencheur, autorité, pièce à produire, délai, conséquence — est dans
+    `references/conformite.md`, que `event-conformite` parcourt entrée par entrée.
+    Ici on repère qu'un régime est concerné ; là-bas on l'instruit.*
 13. **Budget & finance** — suivi budgétaire, engagé vs réalisé, TVA, facturation,
     trésorerie, caution/arrhes.
 14. **RH & staffing** — équipe, bénévoles, planning, briefing, restauration staff.

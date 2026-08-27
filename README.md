@@ -30,7 +30,7 @@ Pour mettre à jour après un `git push` : actualiser le marketplace, puis réin
 C'est ce qui rend le plugin partageable : chaque membre de l'équipe installe depuis
 la même source, et obtient exactement la même version.
 
-## Les neuf briques
+## Les dix briques
 
 Chaque brique est une *skill* : elle se déclenche automatiquement quand le contexte
 de ta phrase correspond à sa description, et elle est invocable explicitement par son
@@ -46,6 +46,7 @@ nom (`event-cadrage`, `event-budget`, …).
 | `event-conducteur` | Pendant | Conducteur minuté avec tops régie + plan de salle + escalade + PACE |
 | `event-risques` | Transverse | Cartographie P×I + pre-mortem + plan de traitement 4T |
 | `event-debrief` | Après | Bilan KPIs vs objectifs + After-Action Review + capitalisation |
+| `event-conformite` | Transverse | Registre des obligations : régimes applicables, autorisations, délais administratifs, pièces à collecter, vérificateur nommé |
 | `event-dossier` | Chapeau | Assemble tout en un jeu de livrables (HTML, conducteur A4, checklists, budget xlsx, annuaire) |
 
 ## Le dossier événement
@@ -64,6 +65,7 @@ mon-evenement/
 ├── 05-conducteur.md
 ├── 06-risques.md
 ├── 07-debrief.md
+├── 08-conformite.md
 └── livrables/               ← généré par event-dossier
 ```
 
@@ -98,6 +100,10 @@ conducteur ») sans passer par les autres.
   servent à révéler les manques, pas à produire un document rassurant.
 - **Outil opérationnel réel.** Les dossiers produits servent à monter de vrais
   événements — d'où la rigueur exigée sur le budget, la sécurité et l'accessibilité.
+- **La conformité se prépare, elle ne se prononce pas.** Le registre des obligations
+  liste des points à faire vérifier par un humain nommé, avec leur délai. Aucune ligne
+  n'en sort marquée « conforme » : ce n'est ni un avis juridique, ni une validation de
+  commission de sécurité.
 
 ## Licence
 

@@ -7,7 +7,7 @@ description: >
   d'"accréditations", de "badges", de "check-in" ou d'"émargement". Pilote
   l'entonnoir invités → inscrits → confirmés → présents, les hypothèses de
   no-show et les garanties à donner au traiteur.
-version: 0.4.1
+version: 0.5.0
 ---
 
 # Inscriptions, jauge & accueil
@@ -100,7 +100,12 @@ N'écris pas dans leurs fichiers — ils ne sont pas à toi.
 - **Données collectées** — le strict nécessaire. Chaque champ demandé fait chuter le
   taux de complétion. Attention **RGPD** : finalité, durée de conservation, base
   légale, mention d'information. Les régimes alimentaires et besoins d'accessibilité
-  sont des données sensibles à traiter comme telles.
+  sont des données sensibles à traiter comme telles. Le détail du régime — et celui du
+  droit à l'image si l'événement est capté — est dans
+  `${CLAUDE_PLUGIN_ROOT}/references/conformite.md`. Ces deux régimes sont les seuls qui
+  doivent être réglés **avant l'ouverture des inscriptions** : une donnée collectée sans
+  base légale ni mention ne se régularise pas après coup. Si rien n'est arbitré, propose
+  `event-conformite` avant d'ouvrir le formulaire.
 - **Accessibilité** — le formulaire doit permettre de signaler un besoin PMR, un
   accompagnateur, un besoin d'interprétation. Sans la question, l'information
   n'arrive jamais, et le jour J il est trop tard.

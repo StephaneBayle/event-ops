@@ -41,6 +41,7 @@ Si plusieurs dossiers candidats existent, demander lequel plutôt que de deviner
 ├── 05-conducteur.md         ← event-conducteur    (pendant)
 ├── 06-risques.md            ← event-risques       (transverse)
 ├── 07-debrief.md            ← event-debrief       (après)
+├── 08-conformite.md         ← event-conformite    (transverse)
 └── livrables/               ← event-dossier       (généré, jamais édité à la main)
     ├── dossier.html
     ├── conducteur-a4.html
@@ -48,6 +49,11 @@ Si plusieurs dossiers candidats existent, demander lequel plutôt que de deviner
     ├── budget.xlsx
     └── annuaire.html
 ```
+
+L'index est un **numéro d'emplacement, pas une chronologie**. `08-conformite.md`
+se remplit tôt — dès que le lieu et le format sont connus — et porte `08` parce que
+les index `00` à `07` étaient pris : renuméroter casserait tous les dossiers déjà
+produits.
 
 Chaque fichier appartient à **une seule** skill. Une skill ne réécrit jamais le fichier
 d'une autre : si elle a besoin d'y changer quelque chose, elle le signale à l'utilisateur.
@@ -112,13 +118,14 @@ Au démarrage, toute skill :
 | Skill | Lit | Écrit |
 |---|---|---|
 | `event-cadrage` | — | `00-fiche-identite.md` |
-| `event-retroplanning` | `00` | `01-retroplanning.md` |
+| `event-retroplanning` | `00`, `08` | `01-retroplanning.md` |
 | `event-budget` | `00`, `03`, `04` | `02-budget.md` |
 | `event-prestataires` | `00`, `02` | `03-prestataires.md` |
 | `event-inscriptions` | `00`, `02`, `03`, `05` | `04-inscriptions.md` |
 | `event-conducteur` | `00`, `01`, `03`, `04` | `05-conducteur.md` |
 | `event-risques` | tous ceux présents | `06-risques.md` |
 | `event-debrief` | tous ceux présents | `07-debrief.md` |
+| `event-conformite` | `00`, `03`, `04` | `08-conformite.md` |
 | `event-dossier` | **tous** | `livrables/*` |
 
 Une dépendance absente n'est **jamais bloquante** : produire quand même, en marquant
@@ -173,6 +180,51 @@ validée. Une valeur estimée par une brique qui n'en est pas propriétaire doit
 - **Ne jamais supprimer une donnée saisie par un humain** (un nom de contact, un montant
   négocié, une contrainte du lieu) sans confirmation explicite.
 - En fin d'écriture, annoncer le fichier touché et sa nouvelle version.
+
+## Données personnelles du dossier
+
+Le dossier porte des données nominatives **par construction** : l'annuaire jour J de
+`05-conducteur.md` (nom, rôle, téléphone), le dispositif d'émargement, et à l'inscription
+les régimes alimentaires et les besoins d'accessibilité. `references/conformite.md`
+classe ces deux dernières catégories en **données sensibles** et impose leur destruction
+après l'événement.
+
+> **Un dossier versionné en git ne peut pas honorer cette destruction.** L'historique
+> conserve ce qu'un commit a écrit, même si le fichier est vidé ensuite ; l'effacer
+> suppose de réécrire le dépôt entier, et chaque clone déjà distribué garde sa copie.
+> Une purge promise sur un dossier commité est une purge qui n'aura pas lieu.
+
+Trois règles, à appliquer avant le premier dossier réel et non après :
+
+1. **Le lien nom ↔ besoin ne s'écrit jamais dans un fichier du dossier.** Régimes
+   alimentaires, allergies, besoins d'accessibilité : le **décompte** suffit à toutes les
+   briques qui en dépendent — le traiteur reçoit des nombres, pas des noms. Le lien
+   nominatif reste dans l'outil d'inscription, sous son propre régime et sa propre durée.
+2. **`04-inscriptions.md` reste agrégé.** C'est déjà sa nature — un entonnoir, des taux,
+   des segments. Y coller une liste d'inscrits transforme une brique de pilotage en
+   fichier de données personnelles, et lui fait franchir la ligne sans que rien ne le
+   signale.
+3. **L'annuaire jour J se réduit au strict opérationnel** : rôle, et le numéro par lequel
+   on joint ce rôle. Préférer une ligne de service à un portable personnel quand elle
+   existe. `livrables/` étant régénérable, il n'a aucune raison d'être versionné —
+   l'annuaire diffusé sur téléphone encore moins.
+
+`.gitignore` à poser à la racine d'un dossier événement destiné à git :
+
+```gitignore
+livrables/
+*-nominatif.md
+*.csv
+```
+
+`livrables/` est **généré** : l'exclure ne perd rien, la vérité restant dans les `.md`.
+Les deux autres motifs couvrent ce qu'on exporte d'un outil de billetterie et qu'on dépose
+« provisoirement » dans le dossier.
+
+**Poser la durée de conservation dès le cadrage, et nommer qui purge.** Une date sans
+titulaire ne se tient pas — c'est la même règle que partout ailleurs dans ce dossier.
+`scripts/check_dossier.py` signale l'empreinte de données personnelles fichier par
+fichier, et avertit si un dossier versionné n'ignore pas `livrables/`.
 
 ## Journal des décisions
 

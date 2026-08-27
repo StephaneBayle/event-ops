@@ -76,4 +76,9 @@ jobs:
           # Si les avertissements disparaissent, ce n'est pas une bonne nouvelle :
           # c'est que la détection des cycles a cessé de fonctionner.
           [ "$cycles" -eq 2 ] || { echo "::error::attendu 2 avertissements de cycle, obtenu $cycles"; exit 1; }
+          # Et RIEN d'autre : ce dossier est défini comme celui qui ne produit que le coût
+          # structurel du cycle. Un avertissement de plus — données personnelles, registre,
+          # fraîcheur — est une régression du jeu d'essai, pas du script.
+          total=$(printf '%s\n' "$sortie" | grep -c '^⚠' || true)
+          [ "$total" -eq 2 ] || { echo "::error::attendu 2 avertissements en tout, obtenu $total"; exit 1; }
           echo "✓ dossier sain vert, et les deux cycles sont toujours vus"

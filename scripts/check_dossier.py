@@ -26,6 +26,7 @@ from __future__ import annotations
 import datetime as dt
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -85,6 +86,37 @@ def iso(value: str | None) -> dt.date | None:
         return dt.date.fromisoformat(value.strip().strip("\"'"))
     except ValueError:
         return None
+
+
+# Coordonnées : ce qui fait basculer un dossier de pilotage en fichier de données
+# personnelles. Motifs volontairement étroits — un faux positif sur un montant ou une
+# date apprendrait vite à ignorer la ligne.
+MOTIF_TEL = re.compile(r"(?<!\d)(?:\+33|0)[\s.\-]?[1-9](?:[\s.\-]?\d{2}){4}(?!\d)")
+MOTIF_MAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]{2,}")
+
+
+def depot_git(chemin: Path) -> bool:
+    """Le dossier est-il sous git ? (`.git` est un fichier dans un worktree)."""
+    return any((p / ".git").exists() for p in [chemin, *chemin.parents])
+
+
+def git_ignore(chemin: Path, depuis: Path) -> bool | None:
+    """git ignore-t-il ce chemin ? None si git ne peut pas répondre.
+
+    On interroge git plutôt que de relire `.gitignore` à la main : les règles de
+    précédence des motifs sont exactement ce qu'on relirait mal.
+
+    `depuis` doit être un répertoire EXISTANT — on sonde des chemins qui n'existent pas
+    encore, et un cwd inexistant fait échouer subprocess, donc taire le contrôle.
+    """
+    try:
+        r = subprocess.run(
+            ["git", "check-ignore", "-q", str(chemin)],
+            cwd=str(depuis), capture_output=True, timeout=5,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return r.returncode == 0 if r.returncode in (0, 1) else None
 
 
 # --- 0. La convention, source du mapping et des dépendances ------------------
@@ -322,6 +354,112 @@ if livrables.is_dir():
                 "au moins un livrable est plus ancien qu'une brique source — "
                 "régénérer avec event-dossier",
             )
+
+
+# --- 6 bis. Données personnelles ---------------------------------------------
+# La convention est explicite : l'historique git ne se purge pas. Une brique peut
+# promettre une destruction après l'événement et ne jamais pouvoir la tenir. Le
+# décompte reste une INFORMATION — un annuaire jour J avec des numéros est légitime,
+# c'est son versionnement qui ne l'est pas. Un contrôle qui crierait sur chaque
+# téléphone s'apprendrait à s'ignorer, et emporterait le seul avertissement utile.
+
+empreinte: list[str] = []
+for name in presents:
+    txt = (dossier / name).read_text(encoding="utf-8")
+    tels, mails = len(MOTIF_TEL.findall(txt)), len(MOTIF_MAIL.findall(txt))
+    if tels or mails:
+        detail = ", ".join(
+            p for p in (f"{tels} tél." if tels else "", f"{mails} courriel(s)" if mails else "") if p
+        )
+        empreinte.append(f"{name} ({detail})")
+if empreinte:
+    info("données personnelles : " + ", ".join(empreinte))
+
+if depot_git(dossier):
+    # On sonde un FICHIER de livrables/, jamais le répertoire : le motif `livrables/`
+    # ne vise que les répertoires, et tant que le répertoire n'existe pas encore git le
+    # traite comme un fichier et répond « non ignoré ». Le contrôle criait alors sur des
+    # dossiers pourtant correctement configurés — soit exactement le défaut qu'il visait.
+    if git_ignore(dossier / "livrables" / "dossier.html", dossier) is False:
+        warn(
+            "données",
+            "dossier versionné et `livrables/` n'est pas ignoré — l'annuaire jour J porte "
+            "des coordonnées, et l'historique git ne se purge pas (voir la convention)",
+        )
+
+
+# --- 6 ter. Le registre de conformité ----------------------------------------
+# R-02 du registre des risques : un tableau de régimes avec statuts et échéances a
+# l'apparence d'un document d'assurance. Détaché de son bandeau — capture d'écran,
+# copier-coller dans une présentation — il se lit comme la preuve que la conformité a
+# été vérifiée, alors qu'il n'en est que le plan de vérification.
+#
+# Ces deux contrôles ne jugent PAS le fond du registre : ils vérifient que la mise en
+# garde y est, et qu'aucune ligne ne conclut. C'est mécanique, pas éditorial.
+
+REGISTRE = "08-conformite.md"
+
+# Vocabulaire fermé de la skill. Liste BLANCHE et non liste noire : interdire le seul
+# mot « conforme » laisserait passer « OK », « validé », « RAS » — toutes les manières
+# d'inventer une conclusion.
+STATUTS_ADMIS = (
+    "à vérifier", "a verifier", "en cours", "demandé", "demande",
+    "obtenu", "sans objet",
+)
+# Ce qu'on montre à l'utilisateur : le vocabulaire, sans les variantes sans accent
+# qui ne sont là que pour la tolérance de saisie.
+STATUTS_AFFICHES = "à vérifier / en cours / demandé / obtenu / sans objet"
+
+
+def normalise(cellule: str) -> str:
+    """Minuscules, sans emphase markdown ni espaces superflus."""
+    return re.sub(r"\s+", " ", cellule.replace("*", "").replace("`", "")).strip().lower()
+
+
+if REGISTRE in presents:
+    txt = (dossier / REGISTRE).read_text(encoding="utf-8")
+    corps = txt.split("---\n", 2)[-1] if txt.startswith("---\n") else txt
+
+    # 1. Le bandeau. Vocabulaire large à dessein : la skill le fait REDIGER, donc une
+    #    comparaison de chaîne exacte casserait à la première reformulation.
+    tete = "\n".join(corps.splitlines()[:18])
+    citation = "\n".join(l for l in tete.splitlines() if l.lstrip().startswith(">"))
+    if not citation:
+        err("registre", f"{REGISTRE} — aucun bandeau d'avertissement en tête (la skill l'impose à chaque version)")
+    elif not (re.search(r"v[ée]rifi", citation, re.I)
+              and re.search(r"(avis|conseil|valeur|port[ée]e)\s+juridique", citation, re.I)):
+        err(
+            "registre",
+            f"{REGISTRE} — le bandeau ne dit pas l'essentiel : qu'il s'agit de points "
+            "à faire vérifier, et que le document ne vaut pas avis juridique",
+        )
+
+    # 2. Les statuts. On localise la colonne par son en-tête plutôt que par sa
+    #    position : « Statut » n'est pas toujours la sixième colonne.
+    lignes = [l for l in corps.splitlines() if l.strip().startswith("|")]
+    col = None
+    for i, ligne in enumerate(lignes):
+        cellules = [normalise(c) for c in ligne.strip().strip("|").split("|")]
+        if any(c.startswith("statut") for c in cellules):
+            col = next(j for j, c in enumerate(cellules) if c.startswith("statut"))
+            lignes = lignes[i + 1:]
+            break
+    if col is None:
+        warn("registre", f"{REGISTRE} — aucune colonne « Statut » : impossible de vérifier qu'aucune ligne ne conclut")
+    else:
+        for ligne in lignes:
+            cellules = ligne.strip().strip("|").split("|")
+            if len(cellules) <= col or set(normalise(ligne)) <= set("|- :"):
+                continue  # ligne de séparation, ou tableau plus étroit
+            valeur = normalise(cellules[col])
+            if not valeur:
+                err("registre", f"{REGISTRE} — une ligne du registre n'a pas de statut")
+            elif not valeur.startswith(STATUTS_ADMIS):
+                err(
+                    "registre",
+                    f"{REGISTRE} — statut « {cellules[col].strip()} » hors du vocabulaire "
+                    f"admis ({STATUTS_AFFICHES}) : un registre ne conclut jamais, il suit",
+                )
 
 
 # --- 7. Complétude (information, jamais une erreur) --------------------------

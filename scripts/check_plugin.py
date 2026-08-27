@@ -11,6 +11,7 @@ Sortie :  0 si tout passe, 1 sinon.
 
 from __future__ import annotations
 
+import datetime as dt
 import json
 import os
 import re
@@ -374,57 +375,144 @@ elif skill_names:
             err("readme", f"annonce « {m.group(1)} briques » mais il y en a {len(skill_names)}")
 
 
-# --- 6. references/chantiers.md : comptes annoncés et skills nommées ---------
+# --- 6. Fichiers de référence : comptes annoncés et skills nommées -----------
 # Même classe de bug que « les six briques » du README, mais plus coûteuse : les
-# skills doivent PARCOURIR ce fichier entrée par entrée. Un compte faux et elles
-# en sautent une, sans que rien ne le signale. Les deux comptes sont annoncés à
-# quatre endroits au total — invariant dupliqué, donc à épingler.
+# skills doivent PARCOURIR ces fichiers entrée par entrée. Un compte faux et elles
+# en sautent une, sans que rien ne le signale. Chaque compte est annoncé à
+# plusieurs endroits du même fichier — invariant dupliqué, donc à épingler.
+#
+# Généralisé à tout fichier de référence : ajouter le sien à REFERENCES_COMPTEES
+# suffit, il n'y a rien à recopier.
 
-CHANTIERS = ROOT / "references" / "chantiers.md"
-if not CHANTIERS.exists():
-    err("chantiers", "references/chantiers.md absent")
-else:
-    ch = CHANTIERS.read_text(encoding="utf-8")
+REFERENCES_COMPTEES = {
+    "chantiers.md": ("lentilles", "domaines"),
+    "conformite.md": ("familles", "régimes"),
+}
+
+
+def verifie_reference(fichier: str, noms: tuple[str, ...]) -> None:
+    chemin = ROOT / "references" / fichier
+    etiquette = fichier[:-3] if fichier.endswith(".md") else fichier
+    if not chemin.exists():
+        err(etiquette, f"references/{fichier} absent")
+        return
+    ch = chemin.read_text(encoding="utf-8")
 
     # Ce que le fichier contient réellement, section par section.
     reels: dict[str, int] = {}
     for sec in re.split(r"^## ", ch, flags=re.M):
         titre = sec.split("\n", 1)[0].lower()
         n = len(re.findall(r"^\d+\. \*\*", sec, re.M))
-        for nom in ("lentilles", "domaines"):
+        for nom in noms:
             if nom in titre and n:
                 reels[nom] = n
 
     mots_alt = "|".join(sorted(MOTS, key=len, reverse=True))
-    for nom in ("lentilles", "domaines"):
+    for nom in noms:
         if nom not in reels:
-            err("chantiers", f"aucune section ne numérote les {nom}")
+            err(etiquette, f"aucune section ne numérote les {nom}")
             continue
         for m in re.finditer(rf"\b([0-9]+|{mots_alt})\s+{nom}\b", ch, re.I):
             mot = m.group(1)
             annonce = int(mot) if mot.isdigit() else MOTS[mot.lower()]
             if annonce != reels[nom]:
                 err(
-                    "chantiers",
+                    etiquette,
                     f"« {m.group(0)} » annoncé alors que le fichier en liste {reels[nom]}",
                 )
 
     # Le fichier nomme les skills censées le parcourir. Si l'une d'elles cesse
     # d'y renvoyer, elle improvise de mémoire — ce que la skill s'interdit.
-    nommees = set()
     entete = ch.split("---", 1)[0]
-    for m in re.finditer(r"`(event-[a-z]+)`", entete):
-        nommees.add(m.group(1))
-    for nom in sorted(nommees):
-        d = SKILLS_DIR / nom
+    for nom_skill in sorted(set(re.findall(r"`(event-[a-z]+)`", entete))):
+        d = SKILLS_DIR / nom_skill
         if not (d / "SKILL.md").exists():
-            err("chantiers", f"{nom} est nommée mais n'existe pas dans skills/")
-        elif "references/chantiers.md" not in (d / "SKILL.md").read_text(encoding="utf-8"):
+            err(etiquette, f"{nom_skill} est nommée mais n'existe pas dans skills/")
+        elif f"references/{fichier}" not in (d / "SKILL.md").read_text(encoding="utf-8"):
             err(
-                "chantiers",
-                f"{nom} doit parcourir chantiers.md mais ne le référence pas",
+                etiquette,
+                f"{nom_skill} doit parcourir {fichier} mais ne le référence pas",
             )
 
+
+for fichier, noms in REFERENCES_COMPTEES.items():
+    verifie_reference(fichier, noms)
+
+
+# --- 6 bis. Fraîcheur d'un fichier de référence réglementaire ----------------
+# R-03 du registre des risques. Le linter sait vérifier la structure d'un fichier de
+# référence et ses comptes ; il ne peut rien dire de l'actualité de son contenu. Un
+# fichier qui cite des textes vieillit sans que rien ne le signale — mode d'échec
+# habituel de toute référence sans propriétaire.
+#
+# Avertissement et jamais erreur : le dépôt a déjà tiré cette leçon sur les cycles. Une
+# CI qui passe au rouge pour une chose qu'on ne peut pas corriger dans la minute
+# s'apprend à s'ignorer, et emporte avec elle les alertes qui comptaient.
+
+REFERENCES_DATEES = {"conformite.md": 12}  # fichier -> péremption en mois
+
+
+def verifie_fraicheur(fichier: str, mois: int) -> None:
+    chemin = ROOT / "references" / fichier
+    if not chemin.exists():
+        return
+    ch = chemin.read_text(encoding="utf-8")
+    etiquette = fichier[:-3] if fichier.endswith(".md") else fichier
+
+    m = re.search(r"\*\*Dernière vérification du contenu\*\*\s*:\s*(\d{4}-\d{2}-\d{2})", ch)
+    if not m:
+        warn(etiquette, f"references/{fichier} ne porte pas de date de dernière vérification")
+    else:
+        try:
+            vu = dt.date.fromisoformat(m.group(1))
+        except ValueError:
+            warn(etiquette, f"references/{fichier} — date de vérification '{m.group(1)}' illisible")
+        else:
+            age = (dt.date.today() - vu).days
+            if age > mois * 30:
+                warn(
+                    etiquette,
+                    f"references/{fichier} vérifié il y a {age // 30} mois "
+                    f"(seuil {mois}) — les textes cités ont pu bouger",
+                )
+
+    m = re.search(r"\*\*Relu par\*\*\s*:\s*(.+)", ch)
+    relecteur = re.sub(r"[*`]", "", m.group(1)).strip().lower() if m else ""
+    if not m:
+        warn(etiquette, f"references/{fichier} ne dit pas qui l'a relu")
+    elif relecteur.startswith("personne"):
+        warn(
+            etiquette,
+            f"references/{fichier} n'a jamais été relu par un humain qualifié — "
+            "le contenu réglementaire est une rédaction initiale non vérifiée",
+        )
+
+
+for fichier, mois in REFERENCES_DATEES.items():
+    verifie_fraicheur(fichier, mois)
+
+
+# --- 7. Aucun fichier de référence mort --------------------------------------
+# Tout ce qui vit dans le dépôt est cloné chez chaque membre de l'équipe : un
+# fichier de référence que plus aucune skill n'ouvre est du poids mort livré à
+# tout le monde. Ce contrôle attrape aussi le nom de fichier ACCENTUÉ — le charset
+# de la référence ${CLAUDE_PLUGIN_ROOT} (§3) exclut les accents, donc un
+# references/conformité.md échapperait en silence au contrôle d'existence.
+
+referencees: set[str] = set()
+for d in skill_dirs:
+    sk = d / "SKILL.md"
+    if sk.exists():
+        referencees.update(
+            re.findall(
+                r"\$\{CLAUDE_PLUGIN_ROOT\}/(references/[A-Za-z0-9_./-]+)",
+                sk.read_text(encoding="utf-8"),
+            )
+        )
+
+for f in sorted((ROOT / "references").glob("*.md")):
+    if f"references/{f.name}" not in referencees:
+        err("références", f"references/{f.name} n'est ouvert par aucune skill")
 
 # --- Rapport -----------------------------------------------------------------
 
