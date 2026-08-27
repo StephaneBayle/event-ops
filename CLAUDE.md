@@ -14,8 +14,12 @@ Plugin Claude pour la gestion d'événements et la production de dossiers opéra
 - `references/` — fichiers de référence partagés, parcourus par les skills.
   - `chantiers.md` — taxonomie des domaines + lentilles de complétude.
   - `convention-dossier.md` — convention du dossier événement persistant.
+  - `conformite.md` — régimes réglementaires : déclencheur, autorité, pièce à produire,
+    délai, conséquence. **Droit français, événement en France.** Ne dit pas le droit :
+    dit quelle question poser, à qui, avant quand. Les ancres de texte qu'il cite sont
+    des points d'entrée de vérification, jamais des citations faisant foi.
 - `scripts/check_plugin.py` — vérification structurelle (voir ci-dessous).
-- `scripts/bump_version.py` — change la version aux douze endroits à la fois.
+- `scripts/bump_version.py` — change la version aux treize endroits à la fois.
 
 ## Vérification
 
@@ -55,9 +59,22 @@ livrables, qui reste un jugement humain (test de l'étranger compétent) :
   instruction `lu:` — correspondent à la colonne « Lit » de la convention. Sans lui,
   `event-budget` demandait de consigner la lecture d'un fichier qu'il n'avait jamais dit
   de lire.
-- Les comptes annoncés par `references/chantiers.md` — « 7 lentilles », « 16 domaines »,
-  répétés à quatre endroits — correspondent à ce que le fichier liste vraiment, et les
-  skills qu'il nomme le référencent effectivement. *Même classe de bug que « les six
+- Les comptes annoncés par un fichier de référence — « 7 lentilles » et « 16 domaines »
+  pour `chantiers.md` (cinq occurrences), « 6 familles » et « 21 régimes » pour
+  `conformite.md` — correspondent à ce que le fichier liste vraiment, et les skills qu'il
+  nomme en en-tête le référencent effectivement. Le contrôle est **générique** : déclarer
+  le fichier et ses noms de compte dans `REFERENCES_COMPTEES` suffit.
+- Un fichier de référence réglementaire porte **sa date de vérification et son
+  relecteur**, déclarés dans `REFERENCES_DATEES`. Le linter avertit au-delà du seuil en
+  mois, **et tant que le relecteur est « personne »** — ce qui est le cas aujourd'hui de
+  `conformite.md`. Le jaune permanent est voulu : ces 21 régimes n'ont jamais été relus
+  par un humain qualifié, et le taire serait exactement le silence que le contrôle vise.
+  Avertissement et jamais erreur, pour la raison déjà apprise sur les cycles.
+- Aucun fichier de `references/` n'est mort : chacun est ouvert par au moins une skill.
+  Un fichier de référence que plus personne n'ouvre est du poids mort cloné chez chaque
+  membre de l'équipe. Ce contrôle attrape en prime le **nom de fichier accentué** — le
+  charset de la référence `${CLAUDE_PLUGIN_ROOT}` exclut les accents, donc un
+  `references/conformité.md` échapperait en silence au contrôle d'existence. *Même classe de bug que « les six
   briques » du README, mais plus coûteuse : les skills doivent le parcourir entrée par
   entrée, et un compte faux leur en fait sauter une sans que rien ne le signale.*
 
@@ -92,10 +109,37 @@ dupliqué. Il contrôle :
   ne sort qu'en avertissement ; **deux ou plus** reste une erreur. Sans cette nuance le
   contrôle ne pouvait jamais être vert, et on apprend vite à ignorer un outil qui crie
   toujours ;
-- livrables générés plus anciens qu'une brique source.
+- livrables générés plus anciens qu'une brique source ;
+- **empreinte de données personnelles** — téléphones et courriels comptés fichier par
+  fichier, en **information** : un annuaire jour J avec des numéros est légitime, c'est son
+  versionnement qui ne l'est pas. En faire un avertissement le ferait crier sur chaque
+  dossier réel, et emporterait avec lui le seul avertissement utile ;
+- **le registre `08-conformite.md`** — bandeau d'avertissement présent en tête, et chaque
+  statut pris dans le vocabulaire fermé de la skill. C'est une **liste blanche** : interdire
+  le seul mot « conforme » laisserait passer « OK », « validé », « RAS ». Le bandeau est
+  cherché sur un vocabulaire large — la skill le fait *rédiger*, donc une comparaison de
+  chaîne exacte casserait à la première reformulation ;
+- **dossier versionné dont `livrables/` n'est pas ignoré** — avertissement. C'est git qui
+  répond (`git check-ignore`), pas une relecture du `.gitignore` : les règles de
+  précédence des motifs sont exactement ce qu'on relirait mal. Si git ne répond pas, le
+  contrôle se tait plutôt que de conclure. **Sonder un fichier de `livrables/`, jamais le
+  répertoire** : le motif `livrables/` ne vise que les répertoires, et tant que le
+  répertoire n'existe pas git le traite comme un fichier et répond « non ignoré ». Et
+  passer à `subprocess` un `cwd` qui existe : sonder un chemin absent avec `cwd` sur son
+  parent absent fait échouer l'appel, donc **taire le contrôle** — les deux défauts ont eu
+  lieu, et seule la contre-épreuve les a montrés.
 
-Ce qui relève de l'information et **jamais de l'erreur** : les briques absentes. La
-convention est explicite — une dépendance absente n'est jamais bloquante.
+Ce qui relève de l'information et **jamais de l'erreur** : les briques absentes et
+l'empreinte de données personnelles. La convention est explicite — une dépendance absente
+n'est jamais bloquante.
+
+**Pourquoi ces deux derniers contrôles existent.** La convention impose la destruction des
+régimes alimentaires et des besoins d'accessibilité après l'événement, et le dossier est
+présenté comme versionnable en git. Les deux ne tiennent pas ensemble : l'historique
+conserve ce qu'un commit a écrit, et chaque clone distribué garde sa copie. Le plugin
+énonçait donc une obligation que son architecture invitait à enfreindre. La section
+« Données personnelles du dossier » de la convention tranche, `event-cadrage` pose le
+`.gitignore` à la création, et ces deux contrôles rendent l'écart visible.
 
 `--no-annotations` supprime les lignes `::error::` / `::warning::` de GitHub Actions.
 Indispensable quand la CI vérifie une sortie **attendue en erreur** : sans lui la course
@@ -138,6 +182,15 @@ pas propriétaire, puis figée dans un devis. `convention-250` montre la même c
 **tient** — l'hypothèse reste une fourchette au cahier des charges jusqu'à ce que
 `event-inscriptions` tranche.
 
+Depuis la v0.5.0 les deux portent `08-conformite.md`, et l'opposition des deux registres
+est le plus utile de la paire : `jpo-800` doit faire **autoriser** l'ouverture d'un site
+non ERP et sort avec deux indéterminés et deux lignes sans vérificateur ; `convention-250`
+s'appuie sur un lieu qui porte déjà son régime, tranche les vingt et un et écarte huit
+régimes **avec leur motif**. `jpo-800` conserve en prime un doublon assumé — `00` § 6 garde
+son tableau réglementaire d'avant la brique, parce que le réduire ferait passer la fiche en
+v2 et périmerait les quatre briques qui la lisent. C'est l'état que rencontrera toute
+équipe qui met le plugin à jour.
+
 `convention-250` porte en plus la propriété qu'aucun autre ne peut porter : **un dossier
 sain sort en exit 0**. Ça paraît trivial ; avant la correction du cycle `02`↔`03`, aucun
 dossier réel ne le pouvait.
@@ -147,8 +200,8 @@ Les deux tournent en CI. Leurs `README.md` disent ce qu'ils démontrent — un j
 
 ### Changer de version
 
-La version vit à **douze endroits** : le manifeste, les deux champs de `marketplace.json`,
-et le frontmatter des neuf skills. Ne pas les modifier à la main :
+La version vit à **treize endroits** : le manifeste, les deux champs de `marketplace.json`,
+et le frontmatter des dix skills. Ne pas les modifier à la main :
 
 ```bash
 python3 scripts/bump_version.py --patch     # ou --minor, --major, ou 0.5.0
@@ -161,14 +214,33 @@ est signalé — son écart pose une question à laquelle le script n'a pas la r
 
 ### Ajouter une skill
 
-Trois endroits à mettre à jour, sinon le script échoue — c'est le but :
-`skills/<nom>/SKILL.md`, la table lit/écrit de `references/convention-dossier.md`,
-et le tableau du `README.md`.
+**Six** endroits à mettre à jour, sinon le script échoue — c'est le but :
 
-Dans le `SKILL.md`, ne pas oublier le champ `lu:` : l'instruction de le renseigner, ou la
-mention explicite qu'il n'y en a pas. Le linter refuse le silence sur ce point — et il
-exige que les dépendances énumérées aux **deux** endroits (la phrase « Lis … » et
-l'instruction `lu:`) soient exactement celles de la colonne « Lit ».
+1. `skills/<nom>/SKILL.md`.
+2. La table lit/écrit de `references/convention-dossier.md` (et son arborescence).
+3. Le tableau du `README.md` — **et son compte en toutes lettres** (« Les dix briques »).
+4. Dans le `SKILL.md`, la phrase « Lis … ».
+5. Dans le `SKILL.md`, l'instruction `lu:` — soit l'instruction de le renseigner, soit la
+   mention explicite qu'il n'y en a pas. Le linter refuse le silence sur ce point, et il
+   exige que les dépendances énumérées aux **deux** endroits (4 et 5) soient exactement
+   celles de la colonne « Lit ». Attention : la phrase « Lis … » peut citer le fichier
+   que la skill écrit, l'instruction `lu:` **non**.
+6. Si la skill parcourt un fichier de référence qui la nomme en en-tête, le
+   `${CLAUDE_PLUGIN_ROOT}/references/<fichier>` correspondant.
+
+Contraintes de nommage, toutes silencieuses si on les enfreint :
+
+| Contrainte | Pourquoi |
+|---|---|
+| Nom de skill `event-[a-z]+` — **un seul segment, sans chiffre ni accent** | `event-x-y` n'est pas reconnu par la table lit/écrit, et le scan du README le capture tronqué |
+| Fichier écrit `NN-nom.md`, sans accent | `08-conformité.md` n'est reconnu ni par la convention ni par `check_dossier.py` |
+| Nom de fichier de référence **ASCII** | le charset `${CLAUDE_PLUGIN_ROOT}` exclut les accents |
+| Au plus 30 caractères entre « écris » et le nom de fichier | tolérance du linter à la prose, pas plus |
+| Jamais `lu:` sur une seule ligne dans un exemple | neutralise le contrôle de péremption sans un message |
+
+Un index d'un dossier événement est un **emplacement, pas une chronologie** : une brique
+qui se remplit tôt peut porter un index élevé si les précédents sont pris. Renuméroter
+casserait tous les dossiers déjà produits et les deux jeux d'essai.
 
 ## Principes de conception
 

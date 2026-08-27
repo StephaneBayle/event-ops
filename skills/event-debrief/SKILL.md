@@ -6,7 +6,7 @@ description: >
   review", un "bilan KPIs" ou la "clôture" d'un événement. Transforme l'événement
   en actif réutilisable : clôture logistique, bilan KPIs vs objectifs, et débrief
   structuré.
-version: 0.4.1
+version: 0.5.0
 ---
 
 # Débrief & capitalisation

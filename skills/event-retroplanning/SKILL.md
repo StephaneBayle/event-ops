@@ -7,7 +7,7 @@ description: >
   Produit le plan de préparation : rétroplanning construit à rebours depuis le
   jour J, matrice RACI par chantier, jalon de décision go/no-go, et checklists
   jalonnées.
-version: 0.4.1
+version: 0.5.0
 ---
 
 # Rétroplanning, RACI & checklists
@@ -18,10 +18,11 @@ vertébrale décisionnelle. On le corrige avec le chemin critique + le RACI.
 ## Dossier
 
 OUVRE `${CLAUDE_PLUGIN_ROOT}/references/convention-dossier.md` et applique-la.
-Lis `00-fiche-identite.md` (l'ancre) avant de produire, écris `01-retroplanning.md` après.
+Lis `00-fiche-identite.md` (l'ancre) et `08-conformite.md` s'il existe avant de
+produire, écris `01-retroplanning.md` après.
 
 **Renseigne le champ `lu:`** du frontmatter avec la version de chaque fichier que tu as
-effectivement lu : `00-fiche-identite.md`.
+effectivement lu : `00-fiche-identite.md` et `08-conformite.md`.
 Respecte la forme **bloc** de la convention — `lu:` seul sur sa ligne, puis une ligne
 indentée par dépendance. Une écriture sur une seule ligne n'est pas relue par
 `scripts/check_dossier.py` : le contrôle de péremption disparaît alors sans un mot.
@@ -54,9 +55,16 @@ sans lui, personne ne sait sur quoi tu t'es appuyé.
    après). Tout chantier ou toute phase non traité = un trou ; signale-le
    explicitement en sortie.
 5. **Délais incompressibles** — repère les tâches dont le délai ne se comprime pas
-   quel que soit l'effort : autorisations administratives, commissions de sécurité ERP,
-   fabrication de signalétique, envoi des invitations (délai de réponse), visas
-   d'intervenants étrangers. Elles doivent être sur le chemin critique.
+   quel que soit l'effort. Les délais **administratifs** sont les plus longs et les moins
+   rattrapables : reprends-les dans le tableau « Calendrier des délais » de
+   `${CLAUDE_PLUGIN_ROOT}/references/conformite.md`, et les échéances déjà arbitrées dans
+   `08-conformite.md` s'il existe. Si ce fichier manque, ne devine pas les délais :
+   pose-les en hypothèse marquée comme telle et propose `event-conformite`.
+   S'y ajoutent les délais non administratifs : fabrication de signalétique, envoi des
+   invitations (délai de réponse), visas d'intervenants étrangers.
+   Tous doivent être sur le chemin critique — et ceux qui conditionnent l'ouverture au
+   public (avis de commission de sécurité au premier chef) sont des **critères de
+   go/no-go**, à rattacher au jalon de l'étape 3.
 6. **Matrice RACI** par chantier : Responsable (fait) / Approbateur (valide) /
    Consulté / Informé. Une seule lettre A par ligne. Élimine les « je croyais que
    c'était toi ».

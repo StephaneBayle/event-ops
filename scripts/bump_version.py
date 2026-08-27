@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Passe le plugin event-ops à une nouvelle version, partout à la fois.
 
-La version vit à DOUZE endroits : `.claude-plugin/plugin.json`, les deux champs
-`version` de `.claude-plugin/marketplace.json`, et le frontmatter des neuf
+La version vit à TREIZE endroits : `.claude-plugin/plugin.json`, les deux champs
+`version` de `.claude-plugin/marketplace.json`, et le frontmatter des dix
 skills. `check_plugin.py` sait dire qu'ils divergent, mais rien n'évitait la
 divergence — et un oubli sur un seul fichier ne se voit qu'après coup, en CI.
 

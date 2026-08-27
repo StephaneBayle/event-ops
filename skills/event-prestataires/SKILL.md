@@ -8,7 +8,7 @@ description: >
   sécurité, mobilier, signalétique, photographe, agence. Couvre la chaîne complète :
   sourcing, cahier des charges, comparaison de devis, contractualisation, briefing,
   réception de prestation.
-version: 0.4.1
+version: 0.5.0
 ---
 
 # Prestataires — du cahier des charges à la réception
@@ -93,6 +93,14 @@ Points à ne pas laisser au téléphone : périmètre annexé au contrat, montan
 échéancier (acompte / solde), pénalités de retard, conditions d'annulation des deux
 côtés, assurance, sous-traitance autorisée ou non, droit à l'image si captation,
 clause RGPD si données personnelles échangées.
+
+**Les pièces à exiger avant signature** sont listées régime par régime par
+`${CLAUDE_PLUGIN_ROOT}/references/conformite.md` : attestation de RC professionnelle,
+attestation de vigilance au-delà du seuil de contrat, cartes professionnelles des agents
+de sécurité, déclaration du traiteur, cession de droits du photographe. Si
+`08-conformite.md` existe, reprends sa colonne « pièces à produire » plutôt que de
+refaire la liste ; sinon, propose `event-conformite` — vérifier une habilitation après
+la signature ne sert plus à rien.
 
 Signale ce qui relève d'une validation juridique humaine — tu prépares, tu ne valides pas.
 

@@ -6,7 +6,7 @@ description: >
   "plan de traitement" ou de "coter les risques" d'un événement. Brique autonome
   (n'appelle aucune skill externe) calibrée pour l'événementiel : no-show
   intervenant, panne technique, météo, sûreté du public, dépassement budgétaire.
-version: 0.4.1
+version: 0.5.0
 ---
 
 # Cartographie des risques événementiels
@@ -37,7 +37,10 @@ sans lui, personne ne sait sur quoi tu t'es appuyé.
    incident médical, évacuation), météo (si extérieur), réputationnel/com',
    financier (dépassement, défaut prestataire), juridique (assurance, droit à
    l'image, conformité, défaut d'accessibilité), fréquentation (sous-remplissage
-   comme sur-affluence).
+   comme sur-affluence). Pour la famille juridique, parcours
+   `${CLAUDE_PLUGIN_ROOT}/references/conformite.md` : un régime au statut « à vérifier »
+   à quelques semaines du jour J est un risque coté, pas une tâche en retard — et son
+   impact est souvent l'impossibilité d'ouvrir.
 3. **Risques de dépendance** — repère les points uniques de défaillance : un
    prestataire sans doublure, un intervenant dont dépend tout le programme, une
    seule source d'alimentation. Ce sont eux qui transforment un incident en fiasco.

@@ -4,10 +4,11 @@ description: >
   Skill chapeau. À utiliser quand l'utilisateur veut "le dossier complet", "le
   dossier opérationnel complet", "tout assembler", "générer le document final" ou
   "produire le livrable" d'un événement. Assemble toutes les briques (cadrage,
-  rétroplanning, budget, prestataires, inscriptions, conducteur, risques, débrief)
+  rétroplanning, budget, prestataires, inscriptions, conducteur, risques,
+  conformité, débrief)
   et produit un jeu de livrables structuré et stylisé, prêt à partager avec une
   équipe.
-version: 0.4.1
+version: 0.5.0
 ---
 
 # Dossier opérationnel complet
@@ -43,7 +44,7 @@ validé ailleurs.
    - AVANT : rétroplanning + go/no-go + RACI + checklists.
    - Moyens : budget, prestataires, inscriptions.
    - PENDANT : conducteur + plan de salle + escalade + PACE.
-   - Transverse : cartographie des risques.
+   - Transverse : cartographie des risques, registre des obligations.
    - APRÈS : clôture + bilan KPIs + AAR.
 2. **Tests de complétude** avant de finaliser. OUVRE et PARCOURS
    `${CLAUDE_PLUGIN_ROOT}/references/chantiers.md` plutôt que de te fier à ta
@@ -77,6 +78,12 @@ Un seul HTML monolithique ne couvre aucun usage terrain correctement. Produis da
 | `budget.xlsx` | **Non négociable** — l'event manager travaille dans Excel | Généré depuis `02-budget.md`, formules de sous-totaux vivantes |
 
 Sur demande : version **.docx** du dossier complet.
+
+**Le registre des obligations (`08-conformite.md`) se reporte avec son bandeau
+d'avertissement**, jamais sans. Détaché de lui, un tableau de régimes « à vérifier » se
+lit comme une attestation de conformité — exactement ce que le registre existe pour
+éviter. Reporte aussi la colonne « vérifié par » : un livrable diffusé sans elle transmet
+des obligations sans titulaire.
 
 Soigne la hiérarchie visuelle et la lisibilité ; évite le rendu « template générique ».
 Les documents destinés au jour J priment sur l'esthétique du dossier : ils se lisent
