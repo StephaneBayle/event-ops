@@ -253,6 +253,70 @@ else:
         elif nie:
             err("lu", f"{d.name} nie le champ `lu:` alors qu'il dépend de {lit.strip()}")
 
+    # --- 4 ter. Forme du champ `lu:` enseignée par les skills -----------------
+    # `check_dossier.py` ne relit QUE la forme bloc. Une skill qui montre la forme
+    # sur une seule ligne neutralise le contrôle de péremption sans un message : le
+    # dossier sort vert alors que rien n'a été vérifié. C'est arrivé sur deux skills.
+    for d in skill_dirs:
+        sk = d / "SKILL.md"
+        if not sk.exists():
+            continue
+        if re.search(r"lu:\s*\{", sk.read_text(encoding="utf-8")):
+            err(
+                "lu",
+                f"{d.name} montre `lu:` sur une seule ligne — seule la forme bloc "
+                "est relue par check_dossier.py",
+            )
+
+    # --- 4 quater. Dépendances : convention ↔ SKILL.md ------------------------
+    # Troisième invariant dupliqué : la colonne « Lit » et les DEUX endroits où une
+    # skill énumère ses dépendances — la phrase « Lis … » et l'instruction `lu:`.
+    # Sans ce contrôle, `event-budget` demandait de consigner la lecture d'un
+    # fichier qu'il n'avait jamais dit de lire.
+    index_fichier = {f[:2]: f for f in declared.values() if f != "livrables/*"}
+
+    def cites(bloc: str) -> set[str]:
+        return set(re.findall(r"`(\d{2}-[a-z-]+\.md)`", bloc))
+
+    for d in skill_dirs:
+        sk = d / "SKILL.md"
+        if not sk.exists() or d.name not in declared:
+            continue
+        lit = lit_de.get(d.name, "")
+        if re.search(r"\btous\b", lit, re.I):
+            continue  # « tous ceux présents » : il n'y a rien à énumérer
+        attendues = {
+            index_fichier[i] for i in re.findall(r"`(\d{2})`", lit) if i in index_fichier
+        }
+        paras = re.split(r"\n\s*\n", sk.read_text(encoding="utf-8"))
+
+        para_lis = next((p for p in paras if re.search(r"\bLis\b", p)), None)
+        if para_lis is None:
+            if attendues:
+                err(
+                    "dépendances",
+                    f"{d.name} — aucune phrase « Lis … » alors que la convention lui "
+                    f"donne {sorted(attendues)}",
+                )
+        else:
+            vues = cites(para_lis) - {declared[d.name]}
+            if vues != attendues:
+                err(
+                    "dépendances",
+                    f"{d.name} — la phrase « Lis … » cite {sorted(vues) or '(rien)'}, "
+                    f"la convention dit {sorted(attendues) or '(rien)'}",
+                )
+
+        para_lu = next((p for p in paras if "`lu:`" in p), None)
+        if para_lu and not re.search(r"[Pp]as de champ\s+`lu:`", para_lu):
+            vues = cites(para_lu)
+            if vues != attendues:
+                err(
+                    "dépendances",
+                    f"{d.name} — l'instruction `lu:` cite {sorted(vues) or '(rien)'}, "
+                    f"la convention dit {sorted(attendues) or '(rien)'}",
+                )
+
     # Numérotation : pas de doublon d'index entre briques.
     seen: dict[str, str] = {}
     for skill, fname in declared.items():

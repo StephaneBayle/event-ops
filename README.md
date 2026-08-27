@@ -46,7 +46,7 @@ nom (`event-cadrage`, `event-budget`, …).
 | `event-conducteur` | Pendant | Conducteur minuté avec tops régie + plan de salle + escalade + PACE |
 | `event-risques` | Transverse | Cartographie P×I + pre-mortem + plan de traitement 4T |
 | `event-debrief` | Après | Bilan KPIs vs objectifs + After-Action Review + capitalisation |
-| `event-dossier` | Chapeau | Assemble tout en un jeu de livrables (HTML, conducteur A4, budget xlsx, annuaire) |
+| `event-dossier` | Chapeau | Assemble tout en un jeu de livrables (HTML, conducteur A4, checklists, budget xlsx, annuaire) |
 
 ## Le dossier événement
 

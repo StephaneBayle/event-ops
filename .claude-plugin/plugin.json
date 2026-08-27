@@ -1,6 +1,6 @@
 {
   "name": "event-ops",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Dossier opérationnel d'événement : cadrage, rétroplanning + RACI, budget, prestataires, inscriptions, conducteur jour J, cartographie des risques, débrief AAR, et assemblage du dossier complet stylisé. Briques modulaires, sans dépendance externe.",
   "author": { "name": "Stéphane Bayle" },
   "homepage": "https://github.com/StephaneBayle/event-ops",

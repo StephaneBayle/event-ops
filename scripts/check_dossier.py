@@ -96,6 +96,8 @@ if not rows:
     print("✗  convention: table 'lit / écrit' introuvable ou format changé.")
     sys.exit(1)
 
+TOUS = "*"  # marqueur : colonne « Lit » à « tous ceux présents »
+
 # fichier -> (brique attendue, dépendances)
 attendu: dict[str, tuple[str, list[str]]] = {}
 index_de: dict[str, str] = {}  # "02" -> "02-budget.md"
@@ -104,8 +106,34 @@ for skill, lit_raw, ecrit in rows:
         continue
     brique = skill[len("event-"):]
     deps = re.findall(r"`(\d{2})`", lit_raw)
+    # « tous ceux présents » n'énumère rien mais veut dire quelque chose de précis :
+    # toutes les briques d'index inférieur. Sans cette résolution, les deux briques
+    # les plus dépendantes du dossier (risques, débrief) sortaient d'ici avec ZÉRO
+    # dépendance, et le contrôle de fraîcheur ne s'appliquait jamais à elles.
+    if not deps and re.search(r"\btous\b", lit_raw, re.I):
+        deps = [TOUS]
     attendu[ecrit] = (brique, deps)
     index_de[ecrit[:2]] = ecrit
+
+
+def deps_de(fichier: str) -> list[str]:
+    """Fichiers dont `fichier` dépend, marqueur TOUS résolu."""
+    brut = attendu[fichier][1]
+    if brut == [TOUS]:
+        return [f for f in sorted(attendu) if f[:2] < fichier[:2]]
+    return [index_de[i] for i in brut if i in index_de]
+
+
+# Paires mutuelles : A lit B ET B lit A. Déduites de la table, jamais redéclarées.
+# Sur un cycle, les deux briques ne peuvent pas être à jour l'une de l'autre en même
+# temps : celle qui n'a pas été écrite en dernier porte forcément la version
+# précédente de l'autre. Ce retard-là est structurel, pas une négligence.
+mutuels: set[frozenset[str]] = {
+    frozenset((f, autre))
+    for f in attendu
+    for autre in deps_de(f)
+    if f in deps_de(autre)
+}
 
 
 # --- 1. Localiser le dossier -------------------------------------------------
@@ -219,12 +247,12 @@ else:
 # dépendance a bougé après elle est potentiellement périmée.
 
 for name, d in meta.items():
-    _, deps = attendu[name]
     maj_self = iso(d["maj"])
-    for idx in deps:
-        dep = index_de.get(idx)
-        if not dep or dep not in meta:
+    for dep in deps_de(name):
+        if dep not in meta:
             continue
+        if frozenset((name, dep)) in mutuels:
+            continue  # un cycle a son propre message, plus bas
         maj_dep = iso(meta[dep]["maj"])
         if maj_self and maj_dep and maj_dep > maj_self:
             warn(
@@ -239,22 +267,38 @@ for name, d in meta.items():
             warn("lu", f"{name} déclare avoir lu {dep}, absent du dossier")
             continue
         actuelle = meta[dep]["version"]
-        if actuelle and re.fullmatch(r"\d+", actuelle) and int(actuelle) > vue:
+        if not (actuelle and re.fullmatch(r"\d+", actuelle)):
+            continue
+        retard = int(actuelle) - vue
+        if retard <= 0:
+            continue
+        if retard == 1 and frozenset((name, dep)) in mutuels:
+            # Coût structurel du cycle, pas un oubli. En faire une erreur, c'est
+            # garantir un dossier rouge en permanence — et apprendre à l'utilisateur
+            # à ignorer ce script.
+            warn(
+                f"cycle {min(name, dep)[:2]}↔{max(name, dep)[:2]}",
+                f"{name} porte {dep} v{vue}, actuel v{actuelle} — retard d'une version, "
+                f"coût normal du cycle",
+            )
+        else:
             err(
                 "lu",
                 f"{name} a été écrit sur la base de {dep} v{vue}, "
                 f"or {dep} est en v{actuelle} — à repasser",
             )
 
-# Le cycle 02 ↔ 03 mérite son message : il est documenté dans la convention.
-f02, f03 = index_de.get("02"), index_de.get("03")
-if f02 in meta and f03 in meta:
-    m02, m03 = iso(meta[f02]["maj"]), iso(meta[f03]["maj"])
-    if m02 and m03 and m03 > m02:
+# Les cycles déclarés méritent leur message : la convention impose une seconde passe.
+for paire in sorted(mutuels, key=sorted):
+    a, b = sorted(paire)
+    if a not in meta or b not in meta:
+        continue
+    ma, mb = iso(meta[a]["maj"]), iso(meta[b]["maj"])
+    if ma and mb and mb > ma:
         warn(
-            "cycle 02↔03",
-            f"{f03} a bougé après {f02} : les montants négociés ne sont peut-être pas "
-            f"intégrés au budget (la convention impose une seconde passe)",
+            f"cycle {a[:2]}↔{b[:2]}",
+            f"{b} a bougé après {a} : `event-{attendu[a][0]}` n'a peut-être pas été "
+            f"repassée (la convention impose une seconde passe sur un cycle)",
         )
 
 

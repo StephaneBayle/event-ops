@@ -6,7 +6,7 @@ description: >
   "plan de traitement" ou de "coter les risques" d'un événement. Brique autonome
   (n'appelle aucune skill externe) calibrée pour l'événementiel : no-show
   intervenant, panne technique, météo, sûreté du public, dépassement budgétaire.
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Cartographie des risques événementiels

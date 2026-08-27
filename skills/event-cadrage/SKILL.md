@@ -7,7 +7,7 @@ description: >
   événement sans cadre encore posé. Produit la FICHE D'IDENTITÉ : objectifs
   mesurables, KPIs, public cible, format, budget, gouvernance. C'est l'ancre dont
   toutes les autres briques dépendent.
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Cadrage d'evenement — Fiche d'identite
@@ -29,6 +29,17 @@ autre brique. C'est la seule qui n'en porte pas.
 Si tu repères un dossier d'événement passé (un autre répertoire avec un `07-debrief.md`),
 propose de t'appuyer sur sa section « à réutiliser » : prestataires retenus, hypothèses
 de fréquentation vérifiées, postes budgétaires sous-estimés.
+
+## Consigner un arbitrage
+
+`00-fiche-identite.md` t'appartient : tu es la **seule** brique qui puisse écrire au
+**Journal des décisions**. Quand un arbitrage structurant est pris (changement de lieu, de
+date, de jauge, coupe budgétaire, go/no-go), n'attends pas une demande de re-cadrage
+complet : relis la fiche, **ajoute une ligne au journal** (date, décision, qui, impact),
+incrémente `version`, et ne touche à rien d'autre.
+
+Sans cela le journal reste vide — et `event-debrief`, qui en fait sa matière première,
+n'aura rien à lire trois mois plus tard.
 
 ## Méthode
 

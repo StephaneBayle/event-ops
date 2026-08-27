@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "Dossier opérationnel d'événement, de bout en bout : cadrage, rétroplanning, budget, prestataires, inscriptions, conducteur jour J, risques, débrief.",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "pluginRoot": "."
   },
   "plugins": [
     {
       "name": "event-ops",
       "source": ".",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "description": "Dossier opérationnel d'événement : cadrage, rétroplanning + RACI, budget, prestataires, inscriptions, conducteur jour J, cartographie des risques, débrief AAR, et assemblage du dossier complet stylisé. Briques modulaires, sans dépendance externe.",
       "keywords": [
         "evenementiel",

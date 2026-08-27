@@ -7,7 +7,7 @@ description: >
   d'"accréditations", de "badges", de "check-in" ou d'"émargement". Pilote
   l'entonnoir invités → inscrits → confirmés → présents, les hypothèses de
   no-show et les garanties à donner au traiteur.
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Inscriptions, jauge & accueil
@@ -19,11 +19,19 @@ qu'il vienne 200 personnes ou 120.
 ## Dossier
 
 OUVRE `${CLAUDE_PLUGIN_ROOT}/references/convention-dossier.md` et applique-la.
-Lis `00-fiche-identite.md` (segments de public, jauge cible) ; écris
-`04-inscriptions.md`.
+Lis `00-fiche-identite.md` (segments de public, jauge cible), puis `02-budget.md`,
+`03-prestataires.md` et `05-conducteur.md` s'ils existent ; écris `04-inscriptions.md`.
+
+**Tu es le propriétaire légitime de la jauge et de la garantie traiteur.** Si `02`, `03`
+ou `05` en portent déjà un chiffre, ils l'ont posé en hypothèse faute de toi : va le
+chercher, tranche, et dis explicitement quelles briques sont à repasser.
 
 **Renseigne le champ `lu:`** du frontmatter avec la version de chaque fichier que tu as
-effectivement lu : `lu: {00-fiche-identite.md: <version>}`.
+effectivement lu : `00-fiche-identite.md`, `02-budget.md`, `03-prestataires.md` et
+`05-conducteur.md`.
+Respecte la forme **bloc** de la convention — `lu:` seul sur sa ligne, puis une ligne
+indentée par dépendance. Une écriture sur une seule ligne n'est pas relue par
+`scripts/check_dossier.py` : le contrôle de péremption disparaît alors sans un mot.
 C'est ce qui permet de détecter plus tard que tu as travaillé sur une version périmée —
 sans lui, personne ne sait sur quoi tu t'es appuyé.
 
@@ -80,8 +88,9 @@ C'est le point où l'entonnoir devient de l'argent.
   c'est un problème de sécurité, pas de confort. Fixe un plafond ferme et une liste
   d'attente.
 
-Fais remonter le nombre garanti et sa date dans `02-budget.md` et le jalon dans
-`01-retroplanning.md`.
+Le nombre garanti et sa date t'appartiennent, mais le budget et le rétroplanning en
+dépendent : **signale qu'il faut repasser `event-budget` et `event-retroplanning`**.
+N'écris pas dans leurs fichiers — ils ne sont pas à toi.
 
 ## Dispositif d'inscription
 
