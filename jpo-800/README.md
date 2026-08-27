@@ -69,12 +69,22 @@ précisément ce qu'il sert à démontrer :
 ```
 $ python3 scripts/check_dossier.py jpo-800
 ·  briques absentes : 01 (retroplanning), 06 (risques), 07 (debrief)
-·  jour J dans 71 jours (J-71)
+·  jour J dans N jours (J-N)          ← dépend de la date du jour
+⚠  cycle 02↔04: 04-inscriptions.md porte 02-budget.md v2, actuel v3 —
+   retard d'une version, coût normal du cycle
+⚠  cycle 04↔05: 04-inscriptions.md porte 05-conducteur.md v1, actuel v2 —
+   retard d'une version, coût normal du cycle
 ✗  lu: 03-prestataires.md a été écrit sur la base de 02-budget.md v1,
    or 02-budget.md est en v3 — à repasser
 
 1 erreur(s) — voir ci-dessus.
 ```
+
+**Les deux avertissements de cycle sont attendus et ne se corrigent pas.** Sur une paire
+mutuelle (`02`↔`04`, `04`↔`05`), les deux briques ne peuvent pas être à jour l'une de
+l'autre en même temps : celle qui n'a pas été écrite en dernier porte forcément la version
+précédente de l'autre. Un retard d'**une** version est ce coût structurel — avertissement.
+L'erreur de `03`, elle, est un retard de **deux** versions : celle-là est un vrai oubli.
 
 **Ce jeu d'essai sort donc en exit 1, et c'est le comportement attendu.** Un jour où il
 sortira en exit 0, c'est que quelqu'un l'aura « réparé » — et il faudra alors soit revenir
@@ -89,8 +99,9 @@ intérêt principal.
 python3 <chemin-du-plugin>/scripts/check_dossier.py jpo-800
 ```
 
-Attendu : **exit 1**, une seule erreur, celle du `lu:` périmé de `03-prestataires.md`.
-Toute autre erreur est une vraie régression.
+Attendu : **exit 1**, une seule erreur, celle du `lu:` périmé de `03-prestataires.md`,
+plus les deux avertissements de cycle ci-dessus. Toute **erreur** supplémentaire est une
+vraie régression.
 
 ## Ce qu'il ne faut pas y chercher
 

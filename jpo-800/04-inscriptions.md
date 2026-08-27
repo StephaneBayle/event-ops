@@ -6,6 +6,9 @@ version: 1
 maj: 2026-07-31
 lu:
   00-fiche-identite.md: 1
+  02-budget.md: 2
+  03-prestataires.md: 1
+  05-conducteur.md: 1
 ---
 
 # Inscriptions, jauge & accueil — JPO 2026
