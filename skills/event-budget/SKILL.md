@@ -7,7 +7,7 @@ description: >
   dépense", de "HT ou TTC", de "reste à engager", de "dépassement" ou veut un
   "budget en Excel". Produit un budget structuré ligne à ligne avec suivi
   budgété / engagé / réalisé, gestion HT-TTC et provision pour aléas.
-version: 0.4.0
+version: 0.4.1
 ---
 
 # Budget événementiel

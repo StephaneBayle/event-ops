@@ -7,7 +7,7 @@ description: >
   événement sans cadre encore posé. Produit la FICHE D'IDENTITÉ : objectifs
   mesurables, KPIs, public cible, format, budget, gouvernance. C'est l'ancre dont
   toutes les autres briques dépendent.
-version: 0.4.0
+version: 0.4.1
 ---
 
 # Cadrage d'evenement — Fiche d'identite

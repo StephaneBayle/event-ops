@@ -8,7 +8,7 @@ description: >
   sécurité, mobilier, signalétique, photographe, agence. Couvre la chaîne complète :
   sourcing, cahier des charges, comparaison de devis, contractualisation, briefing,
   réception de prestation.
-version: 0.4.0
+version: 0.4.1
 ---
 
 # Prestataires — du cahier des charges à la réception

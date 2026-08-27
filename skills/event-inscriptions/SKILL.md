@@ -7,7 +7,7 @@ description: >
   d'"accréditations", de "badges", de "check-in" ou d'"émargement". Pilote
   l'entonnoir invités → inscrits → confirmés → présents, les hypothèses de
   no-show et les garanties à donner au traiteur.
-version: 0.4.0
+version: 0.4.1
 ---
 
 # Inscriptions, jauge & accueil

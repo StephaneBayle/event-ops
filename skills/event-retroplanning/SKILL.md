@@ -7,7 +7,7 @@ description: >
   Produit le plan de préparation : rétroplanning construit à rebours depuis le
   jour J, matrice RACI par chantier, jalon de décision go/no-go, et checklists
   jalonnées.
-version: 0.4.0
+version: 0.4.1
 ---
 
 # Rétroplanning, RACI & checklists
