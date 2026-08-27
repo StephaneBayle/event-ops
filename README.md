@@ -15,9 +15,21 @@ même dépôt, versionnés, clonables**, sans jamais entrer dans le tree distrib
 
 ## Contenu
 
-| Répertoire | Cas |
-|---|---|
-| `jpo-800/` | Journée portes ouvertes, 800 personnes, site industriel ouvert au public. Dossier complet produit en déroulant les skills de bout en bout. Voir son `README.md` |
+| Répertoire | Cas | Sortie attendue |
+|---|---|---|
+| `jpo-800/` | Journée portes ouvertes, 800 personnes, site industriel ouvert au public | **exit 1** — un défaut délibérément conservé |
+| `convention-250/` | Convention commerciale interne, 250 personnes, hybride | **exit 0** — dossier sain |
+
+Les deux forment une **paire** : même piège de la garantie traiteur estimée par une brique
+qui n'en est pas propriétaire, issue opposée. `jpo-800` montre le devis qui part en
+signature avec le mauvais chiffre ; `convention-250` montre la chaîne qui tient. Les lire
+côte à côte vaut mieux que lire l'un des deux.
+
+`convention-250` porte aussi la propriété qu'aucun autre jeu d'essai ne peut porter :
+**un dossier sain sort en exit 0**. Ça paraît trivial ; ça ne l'était pas — avant la
+correction du cycle `02`↔`03`, aucun dossier réel ne pouvait être vert.
+
+Chacun porte son `README.md`, qui dit ce qu'il démontre.
 
 ## Utilisation
 
