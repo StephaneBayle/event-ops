@@ -56,3 +56,22 @@ jobs:
           printf '%s\n' "$sortie" | grep -q '03-prestataires.md' \
             || { echo "::error::l'erreur attendue ne porte pas sur 03-prestataires.md"; exit 1; }
           echo "✓ jeu d'essai conforme à son README"
+
+      - name: convention-250 sort en exit 0, cycles toujours détectés
+        # Le pendant sain de jpo-800. Il verrouille la propriété qui manquait le plus :
+        # un dossier correctement tenu PEUT être vert. Avant la correction du cycle
+        # 02↔03, aucun dossier réel ne le pouvait.
+        env:
+          GITHUB_ACTIONS: "false"
+        run: |
+          set +e
+          sortie=$(python3 scripts/check_dossier.py ../jeux-essai/convention-250 2>&1)
+          code=$?
+          set -e
+          printf '%s\n' "$sortie"
+          [ "$code" -eq 0 ] || { echo "::error::attendu exit 0, obtenu $code"; exit 1; }
+          cycles=$(printf '%s\n' "$sortie" | grep -c 'cycle 0' || true)
+          # Si les avertissements disparaissent, ce n'est pas une bonne nouvelle :
+          # c'est que la détection des cycles a cessé de fonctionner.
+          [ "$cycles" -eq 2 ] || { echo "::error::attendu 2 avertissements de cycle, obtenu $cycles"; exit 1; }
+          echo "✓ dossier sain vert, et les deux cycles sont toujours vus"
