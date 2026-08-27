@@ -118,9 +118,25 @@ Les jeux d'essai vivent sur la **branche orpheline `jeu-essai`**, jamais dans l'
 Tout ce qu'on met ici part chez chaque membre de l'équipe. **Ne rien ajouter à la racine
 qui ne serve pas à l'exécution du plugin.**
 
-Le jeu d'essai `jpo-800` conserve **délibérément** une incohérence (`03-prestataires.md`
-à 450 couverts quand `02` et `05` sont à 380) : elle documente le seul défaut de fond du
-plugin — rien ne rejoue les sections « À faire remonter ». Son `README.md` l'explique.
+Deux jeux d'essai, et ils forment une **paire** — même piège, issue opposée :
+
+| Jeu d'essai | Cas | Sortie attendue |
+|---|---|---|
+| `jpo-800` | Portes ouvertes, 800 personnes, site industriel | **exit 1** — défaut délibéré |
+| `convention-250` | Convention interne, 250 personnes, hybride | **exit 0** — dossier sain |
+
+`jpo-800` conserve **délibérément** une incohérence (`03-prestataires.md` à 450 couverts
+quand `02` et `05` sont à 380) : une garantie traiteur estimée par une brique qui n'en est
+pas propriétaire, puis figée dans un devis. `convention-250` montre la même chaîne qui
+**tient** — l'hypothèse reste une fourchette au cahier des charges jusqu'à ce que
+`event-inscriptions` tranche.
+
+`convention-250` porte en plus la propriété qu'aucun autre ne peut porter : **un dossier
+sain sort en exit 0**. Ça paraît trivial ; avant la correction du cycle `02`↔`03`, aucun
+dossier réel ne le pouvait.
+
+Les deux tournent en CI. Leurs `README.md` disent ce qu'ils démontrent — un jeu d'essai
+« nettoyé » sans lire son README perd son intérêt.
 
 ### Changer de version
 
