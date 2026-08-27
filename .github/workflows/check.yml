@@ -11,9 +11,9 @@ jobs:
     name: Cohérence du plugin
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
@@ -25,9 +25,9 @@ jobs:
     name: Jeu d'essai (check_dossier)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
@@ -35,6 +35,10 @@ jobs:
       # plugin, mais c'est le seul test de bout en bout de check_dossier.py. Sans ce
       # job, deux défauts silencieux y sont déjà passés inaperçus.
       - name: Récupérer la branche orpheline
+        # Dépend de la persistance des identifiants par actions/checkout — mécanisme
+        # qui a changé en v6 (« persist creds to a separate file »). Si un jour ce
+        # fetch échoue en 403 après une montée de version, c'est ici qu'il faut
+        # regarder, et `persist-credentials: true` explicite est le premier essai.
         run: |
           git fetch --no-tags --depth=1 origin jeu-essai:jeu-essai
           git worktree add ../jeux-essai jeu-essai
